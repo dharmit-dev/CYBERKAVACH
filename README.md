@@ -1,4 +1,4 @@
-<p align="center">
+<p align="center" style="background-color: #102a43; padding: 24px; border-radius: 8px;">
   <img src="public/assets/images/logo.png" alt="CyberKavach Logo" width="320px"/>
 </p>
 
