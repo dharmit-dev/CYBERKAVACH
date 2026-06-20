@@ -13,16 +13,20 @@ final class QRService
 {
     public static function generateTeamQr(string $teamIdentifier, string $payload): string
     {
-        $relativePath = 'storage/qr/team-' . preg_replace('/[^A-Z0-9-]/', '', $teamIdentifier) . '.svg';
-        $absolutePath = BASE_PATH . '/' . $relativePath;
+        $relativePath = 'uploads/qr/team-' . preg_replace('/[^A-Z0-9-]/', '', $teamIdentifier) . '.svg';
+        $absolutePath = BASE_PATH . '/public/' . $relativePath;
 
         if (!is_dir(dirname($absolutePath))) {
             mkdir(dirname($absolutePath), 0775, true);
         }
 
         // Try Endroid if available (composer install ran)
-        if (class_exists('\Endroid\QrCode\Builder\Builder')) {
-            return self::generateWithEndroid($payload, $absolutePath, $relativePath);
+        if (class_exists('\Endroid\QrCode\Builder\Builder') && method_exists('\Endroid\QrCode\Builder\Builder', 'create')) {
+            try {
+                return self::generateWithEndroid($payload, $absolutePath, $relativePath);
+            } catch (Throwable $e) {
+                // Fall back to pure PHP generator below
+            }
         }
 
         // Pure-PHP standards-compliant QR generator (always available)

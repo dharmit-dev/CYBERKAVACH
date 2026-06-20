@@ -31,6 +31,8 @@ final class EventService
             'venue' => $input['venue'],
             'registration_deadline' => $input['registration_deadline_date'] . ' ' . $input['registration_deadline_time'] . ':00',
             'capacity' => (int) $input['capacity'],
+            'late_arrival_threshold_minutes' => (int) ($input['late_arrival_threshold_minutes'] ?? 15),
+            'early_exit_threshold_minutes' => (int) ($input['early_exit_threshold_minutes'] ?? 15),
             'poster_path' => $posterPath,
             'team_allowed' => !empty($input['team_allowed']),
             'min_team_size' => (int) ($input['min_team_size'] ?? 0),
@@ -108,6 +110,10 @@ final class EventService
 
                 EventRegistration::registerIndividual((int) $event['id'], (int) $user['id']);
                 $message = 'Registration successful.';
+                
+                // Dispatch confirmation email
+                $qrUrl = url('registrations/history.php');
+                MailService::sendRegistrationConfirmation($user['email'], $user['full_name'], $event['title'], '', $qrUrl);
             } else {
                 if ((int) $event['team_allowed'] !== 1) {
                     throw new RuntimeException('Team registration is not enabled for this event.');
@@ -141,7 +147,7 @@ final class EventService
                     }
                 }
 
-                EventRegistration::createTeamRegistration((int) $event['id'], (int) $user['id'], trim((string) $input['team_name']), $memberIds);
+                $teamId = EventRegistration::createTeamRegistration((int) $event['id'], (int) $user['id'], trim((string) $input['team_name']), $memberIds);
                 NotificationService::notifyUsers($memberIds, [
                     'title' => 'Team created',
                     'message' => 'Team ' . trim((string) $input['team_name']) . ' was registered for ' . $event['title'] . '.',
@@ -151,6 +157,11 @@ final class EventService
                     'created_by' => $user['id'],
                 ]);
                 $message = 'Team registration successful. Team QR has been generated.';
+                
+                // Fetch generated QR path to send via email
+                $teamRow = db()->query('SELECT qr_path FROM event_teams WHERE id = ' . $teamId)->fetch();
+                $qrUrl = url($teamRow['qr_path'] ?? '');
+                MailService::sendRegistrationConfirmation($user['email'], $user['full_name'], $event['title'], trim((string) $input['team_name']), $qrUrl);
             }
 
             db()->commit();

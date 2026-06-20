@@ -22,6 +22,19 @@ final class MailService
         return $result['ok'];
     }
 
+    public static function sendRegistrationConfirmation(string $email, string $name, string $eventTitle, string $teamName, string $qrUrl): bool
+    {
+        $subject = app_config('name') . ' Registration Confirmation';
+        $message = "Hello {$name},\n\nThank you for registering for the event: {$eventTitle}.\n";
+        if ($teamName !== '') {
+            $message .= "Your registered team name is: {$teamName}\n";
+        }
+        $message .= "\nYou can scan or present your check-in QR code here:\n{$qrUrl}\n\nBest regards,\n" . app_config('name');
+
+        $result = self::sendEmail($email, $subject, $message);
+        return $result['ok'];
+    }
+
     public static function sendEmail(string $to, string $subject, string $message): array
     {
         $mailHost = env('MAIL_HOST', '');
