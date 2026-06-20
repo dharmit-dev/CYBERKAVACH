@@ -20,6 +20,17 @@ require_once BASE_PATH . '/app/Middleware/headers.php';
 
 load_env(BASE_PATH . '/.env');
 
+// Dynamic error configuration based on APP_DEBUG variable
+if (env('APP_DEBUG', false)) {
+    ini_set('display_errors', '1');
+    ini_set('display_startup_errors', '1');
+    error_reporting(E_ALL);
+} else {
+    ini_set('display_errors', '0');
+    ini_set('display_startup_errors', '0');
+    error_reporting(0);
+}
+
 date_default_timezone_set(env('APP_TIMEZONE', 'Asia/Kolkata'));
 
 $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
