@@ -19,7 +19,7 @@ $unreadCount = Notification::countUnreadForUser((int) $user['id']);
 <div class="app-shell">
     <aside class="sidebar">
         <div class="sidebar-brand">
-            <img src="<?= h(url('assets/images/logo.png')) ?>" alt="CyberKavach Logo" style="height: 55px; margin-bottom: 0.5rem; display: block;">
+            <img src="<?= h(url('assets/images/logo.png')) ?>" alt="CyberKavach Logo" style="width: 100%; max-width: 180px; height: auto; margin-bottom: 0.5rem; display: block;">
             <strong><?= h($user['role_name']) ?></strong>
         </div>
         <nav class="side-nav" aria-label="Role navigation">
