@@ -6,6 +6,7 @@ define('BASE_PATH', dirname(__DIR__, 2));
 
 require_once BASE_PATH . '/app/Core/env.php';
 load_env(BASE_PATH . '/.env');
+require_once BASE_PATH . '/app/Helpers/functions.php';
 require_once BASE_PATH . '/config/database.php';
 require_once BASE_PATH . '/app/Core/database.php';
 require_once BASE_PATH . '/app/Models/User.php';
@@ -15,6 +16,7 @@ require_once BASE_PATH . '/app/Models/Notification.php';
 require_once BASE_PATH . '/app/Services/NotificationService.php';
 require_once BASE_PATH . '/app/Services/AuditService.php';
 require_once BASE_PATH . '/app/Services/ApprovalService.php';
+require_once BASE_PATH . '/app/Services/MailService.php';
 
 // Access gating if called from web
 if (PHP_SAPI !== 'cli') {
@@ -78,6 +80,22 @@ try {
             'entity_id' => $reqId,
             'created_by' => null,
         ]);
+
+        // Email alert trigger to all active coordinators
+        $stmtEmails = $db->query("
+            SELECT u.email, u.full_name
+            FROM users u
+            INNER JOIN roles r ON r.id = u.role_id
+            WHERE r.role_key IN ('student_coordinator', 'faculty_coordinator') AND u.status = 'active'
+        ");
+        $coords = $stmtEmails->fetchAll();
+
+        $mailSubject = app_config('name') . ' - Overdue Escalation Alert';
+        $mailMessage = "Attention Coordinator,\n\nThe approval request: \"{$title}\" has been idle beyond its escalation threshold of {$hours} hours.\n\nPlease review it immediately.\n\nBest regards,\n" . app_config('name');
+
+        foreach ($coords as $c) {
+            MailService::sendEmail($c['email'], $mailSubject, $mailMessage);
+        }
 
         // 4. Record Audit log
         AuditService::record('request_escalated', 'approvals', null, 'approval_requests', $reqId);

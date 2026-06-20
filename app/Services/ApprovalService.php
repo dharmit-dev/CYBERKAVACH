@@ -61,6 +61,13 @@ final class ApprovalService
 
         AuditService::record('approval_submitted', 'approvals', $requestedBy, 'approval_requests', $requestId);
 
+        $submitter = User::findById($requestedBy);
+        if ($submitter) {
+            $mailSubject = app_config('name') . ' - Request Submitted';
+            $mailMessage = "Hello {$submitter['full_name']},\n\nYour request: \"{$title}\" has been successfully submitted and is pending review.\n\nBest regards,\n" . app_config('name');
+            MailService::sendEmail($submitter['email'], $mailSubject, $mailMessage);
+        }
+
         return $requestId;
     }
 
@@ -108,6 +115,25 @@ final class ApprovalService
 
         AuditService::record('approval_approved', 'approvals', (int) $actor['id'], 'approval_requests', $requestId);
 
+        $requesterEmail = $request['submitter_email'] ?? '';
+        $requesterName = $request['submitter_name'] ?? 'Member';
+        if ($requesterEmail === '') {
+            $req = User::findById((int) $request['requested_by']);
+            if ($req) {
+                $requesterEmail = $req['email'];
+                $requesterName = $req['full_name'];
+            }
+        }
+        if ($requesterEmail !== '') {
+            $mailSubject = app_config('name') . ' - Request Status Update';
+            if ($nextStep) {
+                $mailMessage = "Hello {$requesterName},\n\nYour request: \"{$request['title']}\" has been updated to \"Under Review\".\n\nRemarks by {$actor['full_name']}:\n{$comments}\n\nBest regards,\n" . app_config('name');
+            } else {
+                $mailMessage = "Hello {$requesterName},\n\nYour request: \"{$request['title']}\" has been fully APPROVED!\n\nFinal remarks by {$actor['full_name']}:\n{$comments}\n\nBest regards,\n" . app_config('name');
+            }
+            MailService::sendEmail($requesterEmail, $mailSubject, $mailMessage);
+        }
+
         return ['ok' => true, 'step' => $currentStep];
     }
 
@@ -142,6 +168,21 @@ final class ApprovalService
 
         AuditService::record('approval_rejected', 'approvals', (int) $actor['id'], 'approval_requests', $requestId);
 
+        $requesterEmail = $request['submitter_email'] ?? '';
+        $requesterName = $request['submitter_name'] ?? 'Member';
+        if ($requesterEmail === '') {
+            $req = User::findById((int) $request['requested_by']);
+            if ($req) {
+                $requesterEmail = $req['email'];
+                $requesterName = $req['full_name'];
+            }
+        }
+        if ($requesterEmail !== '') {
+            $mailSubject = app_config('name') . ' - Request Status Update';
+            $mailMessage = "Hello {$requesterName},\n\nYour request: \"{$request['title']}\" has been REJECTED.\n\nRemarks by {$actor['full_name']}:\n{$comments}\n\nBest regards,\n" . app_config('name');
+            MailService::sendEmail($requesterEmail, $mailSubject, $mailMessage);
+        }
+
         return ['ok' => true];
     }
 
@@ -174,6 +215,21 @@ final class ApprovalService
         ]);
 
         AuditService::record('approval_returned', 'approvals', (int) $actor['id'], 'approval_requests', $requestId);
+
+        $requesterEmail = $request['submitter_email'] ?? '';
+        $requesterName = $request['submitter_name'] ?? 'Member';
+        if ($requesterEmail === '') {
+            $req = User::findById((int) $request['requested_by']);
+            if ($req) {
+                $requesterEmail = $req['email'];
+                $requesterName = $req['full_name'];
+            }
+        }
+        if ($requesterEmail !== '') {
+            $mailSubject = app_config('name') . ' - Request Status Update';
+            $mailMessage = "Hello {$requesterName},\n\nYour request: \"{$request['title']}\" was returned for changes.\n\nRemarks by {$actor['full_name']}:\n{$comments}\n\nPlease review and update your submission.\n\nBest regards,\n" . app_config('name');
+            MailService::sendEmail($requesterEmail, $mailSubject, $mailMessage);
+        }
 
         return ['ok' => true];
     }
@@ -290,7 +346,7 @@ final class ApprovalService
     public static function escalationCandidates(): array
     {
         $stmt = db()->query(
-            "SELECT ar.*, aw.workflow_key, aw.name AS workflow_name
+            "SELECT ar.*, aw.workflow_key, aw.name AS workflow_name, aw.escalation_hours
              FROM approval_requests ar
              INNER JOIN approval_workflows aw ON aw.id = ar.workflow_id
              WHERE ar.status IN ('pending', 'under_review')
