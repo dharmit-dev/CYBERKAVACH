@@ -23,7 +23,7 @@ if ($user) {
     <div class="panel-heading">
         <div>
             <h2>Published Events</h2>
-            <p>Browse approved CyberKavach events and register before the deadline.</p>
+            <p>Browse approved club events and register before the deadline.</p>
         </div>
         <?php if (!$user): ?><a class="button button-small" href="<?= h(url('login.php')) ?>">Login to register</a><?php endif; ?>
     </div>

@@ -40,7 +40,7 @@ require BASE_PATH . '/app/Views/layouts/header.php';
 ?>
 <form class="form-card" method="post" action="<?= h(url('login.php')) ?>" novalidate>
     <h2>Login</h2>
-    <p class="lede">Access your CyberKavach club dashboard.</p>
+    <p class="lede">Access your club dashboard.</p>
     <?= csrf_field() ?>
 
     <div class="field">
