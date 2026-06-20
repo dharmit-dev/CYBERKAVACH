@@ -46,6 +46,32 @@ require_once BASE_PATH . '/app/Services/AuditService.php';
 require_once BASE_PATH . '/app/Services/MailService.php';
 require_once BASE_PATH . '/app/Services/OtpService.php';
 require_once BASE_PATH . '/app/Models/User.php';
+
+// Session Hijacking Protection
+if (isset($_SESSION['user_id'])) {
+    if (empty($_SESSION['_client_ip']) || empty($_SESSION['_client_ua'])) {
+        $_SESSION['_client_ip'] = client_ip();
+        $_SESSION['_client_ua'] = user_agent();
+    } elseif ($_SESSION['_client_ip'] !== client_ip() || $_SESSION['_client_ua'] !== user_agent()) {
+        AuditService::record('session_hijack_blocked', 'auth', (int) $_SESSION['user_id'], 'users', (int) $_SESSION['user_id']);
+        
+        $_SESSION = [];
+        if (ini_get('session.use_cookies')) {
+            $params = session_get_cookie_params();
+            setcookie(session_name(), '', time() - 42000, $params['path'], $params['domain'], $params['secure'], $params['httponly']);
+        }
+        session_destroy();
+        
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_name('CYBERKAVACH_SESSION');
+            session_start();
+        }
+        $_SESSION['_initiated'] = true;
+        
+        flash('error', 'Session validation failed due to network change.');
+        redirect('login.php');
+    }
+}
 require_once BASE_PATH . '/app/Models/Event.php';
 require_once BASE_PATH . '/app/Models/EventRegistration.php';
 require_once BASE_PATH . '/app/Models/ApprovalRequest.php';
