@@ -237,7 +237,7 @@ final class EventService
 
         $filename = 'event-' . bin2hex(random_bytes(12)) . '.' . $allowed[$mime];
         $relativePath = 'uploads/event-posters/' . $filename;
-        $absolutePath = BASE_PATH . '/public/' . $relativePath;
+        $absolutePath = PUBLIC_PATH . '/' . $relativePath;
 
         if (!move_uploaded_file($file['tmp_name'], $absolutePath)) {
             return ['ok' => false, 'message' => 'Unable to save poster.'];

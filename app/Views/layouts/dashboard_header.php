@@ -13,7 +13,7 @@ $unreadCount = Notification::countUnreadForUser((int) $user['id']);
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= h($title) ?></title>
-    <link rel="stylesheet" href="<?= h(url('assets/css/app.css')) ?>?v=<?= filemtime(BASE_PATH . '/public/assets/css/app.css') ?>">
+    <link rel="stylesheet" href="<?= h(url('assets/css/app.css')) ?>?v=<?= filemtime(PUBLIC_PATH . '/assets/css/app.css') ?>">
 </head>
 <body>
 <div class="app-shell">

@@ -35,7 +35,7 @@ final class CertificateService
 
         $filename = 'template-' . bin2hex(random_bytes(12)) . '.' . $allowed[$mime];
         $relativePath = 'uploads/certificate-templates/' . $filename;
-        $absolutePath = BASE_PATH . '/public/' . $relativePath;
+        $absolutePath = PUBLIC_PATH . '/' . $relativePath;
 
         if (!is_dir(dirname($absolutePath))) {
             mkdir(dirname($absolutePath), 0775, true);
@@ -69,18 +69,18 @@ final class CertificateService
         }
 
         $settings = json_decode($template['text_settings'], true);
-        $templatePath = BASE_PATH . '/public/' . $template['file_path'];
+        $templatePath = PUBLIC_PATH . '/' . $template['file_path'];
 
         if (!file_exists($templatePath)) {
             return ['ok' => false, 'message' => 'Template file not found on disk.'];
         }
 
-        $certificatesDir = BASE_PATH . '/public/uploads/certificates';
+        $certificatesDir = PUBLIC_PATH . '/uploads/certificates';
         if (!is_dir($certificatesDir)) {
             mkdir($certificatesDir, 0775, true);
         }
 
-        $zipDir = BASE_PATH . '/public/uploads/certificates/batches';
+        $zipDir = PUBLIC_PATH . '/uploads/certificates/batches';
         if (!is_dir($zipDir)) {
             mkdir($zipDir, 0775, true);
         }
@@ -153,7 +153,7 @@ final class CertificateService
             // Save certificate image
             $certFilename = 'cert-' . $code . '.png';
             $certRelativePath = 'uploads/certificates/' . $certFilename;
-            $certAbsolutePath = BASE_PATH . '/public/' . $certRelativePath;
+            $certAbsolutePath = PUBLIC_PATH . '/' . $certRelativePath;
 
             imagepng($image, $certAbsolutePath);
             imagedestroy($image);

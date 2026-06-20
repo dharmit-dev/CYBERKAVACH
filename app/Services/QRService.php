@@ -14,7 +14,7 @@ final class QRService
     public static function generateTeamQr(string $teamIdentifier, string $payload): string
     {
         $relativePath = 'uploads/qr/team-' . preg_replace('/[^A-Z0-9-]/', '', $teamIdentifier) . '.svg';
-        $absolutePath = BASE_PATH . '/public/' . $relativePath;
+        $absolutePath = PUBLIC_PATH . '/' . $relativePath;
 
         if (!is_dir(dirname($absolutePath))) {
             mkdir(dirname($absolutePath), 0775, true);

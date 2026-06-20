@@ -4,6 +4,16 @@ declare(strict_types=1);
 
 define('BASE_PATH', dirname(__DIR__, 2));
 
+if (is_dir(BASE_PATH . '/public')) {
+    define('PUBLIC_PATH', BASE_PATH . '/public');
+} elseif (is_dir(BASE_PATH . '/htdocs')) {
+    define('PUBLIC_PATH', BASE_PATH . '/htdocs');
+} elseif (is_dir(BASE_PATH . '/public_html')) {
+    define('PUBLIC_PATH', BASE_PATH . '/public_html');
+} else {
+    define('PUBLIC_PATH', BASE_PATH);
+}
+
 require_once BASE_PATH . '/app/Core/env.php';
 require_once BASE_PATH . '/app/Helpers/functions.php';
 require_once BASE_PATH . '/app/Middleware/headers.php';
