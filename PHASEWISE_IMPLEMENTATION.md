@@ -80,3 +80,25 @@ This report documents the detailed features, database additions, user interfaces
 *   **Role Clearance Gating**: Access to coordinator points management is strictly verified via role checking middleware (`require_role(...)`).
 *   **Sanitized Points Bounds**: Validates inputs to ensure only valid non-zero values are requested, preventing integer underflow attacks.
 *   **Failsafe Audit Logging**: Points adjustments and prize claims are permanently logged inside `audit_logs` for tracking.
+
+---
+
+## 📊 Phase 5: Operational Analytics Dashboard & Email Alerts Integration (Module 6)
+
+### 1. Functional Features
+*   **Analytics View (`analytics.php`)**:
+    *   Created a high-fidelity analytics console for coordinators showing live operational totals.
+    *   Aggregates registration profiles (individual vs team), check-ins/check-outs, late arrival rates, early exits, reward points distribution across categories, badge unlock milestones, workflow status counts, and coordinator workloads.
+    *   Implemented charts using raw CSS-driven responsive bar representations (HTML/SVG elements) for lightweight, high-contrast, dependency-free styling.
+*   **Requester Email Notifications (`ApprovalService.php`)**:
+    *   Integrates automatic notification emails via `MailService` on approval submission, transitions to intermediate statuses (`under_review`), approvals, returns, and rejections.
+*   **Escalation Warning System (`escalate.php`)**:
+    *   Upgraded the command-line escalation engine. For requests idle beyond their configured threshold (>48h/72h), the engine sends warning alerts to all active coordinators highlighting pending reviews.
+*   **Layout & Sidebar Wiring (`components.php`)**:
+    *   Wired the previously dead "Analytics Review" and "Reports" sidebar navigation items to route directly to `admin/analytics.php` for authorized roles.
+
+### 2. Bonus Security Features Added
+*   **Access Control Gating**: The analytics view is strictly restricted to Faculty and Student Coordinators using `require_role(...)`.
+*   **PDO SQL Parameter Binding**: Used strict database parameter binding for all dynamic aggregations to prevent SQL injection attempts.
+*   **HTML Output Sanitization**: Enforced `h()` HTML escaping on all dynamic outputs inside the dashboard grids, charts, and tables to eliminate Cross-Site Scripting (XSS) risks.
+*   **Double-Alert Prevention**: In CLI escalation runs, updates `escalation_due_at = NULL` before dispatching notifications to ensure coordinators only receive a single email alert per overdue request.
