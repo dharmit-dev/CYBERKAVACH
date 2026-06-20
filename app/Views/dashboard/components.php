@@ -23,6 +23,7 @@ function dashboard_nav(?string $roleKey): array
             ['label' => 'Approval Requests', 'href' => 'approvals/index.php'],
             ['label' => 'User Approvals', 'href' => 'approvals/index.php?type=user'],
             ['label' => 'Certificates', 'href' => 'certificates/templates.php'],
+            ['label' => 'Manage Rewards', 'href' => 'rewards/manage.php'],
             ['label' => 'Analytics Review', 'href' => 'dashboard.php?panel=analytics'],
             ['label' => 'Audit Oversight', 'href' => 'dashboard.php?panel=audit'],
         ]),
@@ -32,6 +33,7 @@ function dashboard_nav(?string $roleKey): array
             ['label' => 'Approval Queue', 'href' => 'approvals/index.php'],
             ['label' => 'Student Accounts', 'href' => 'approvals/index.php?type=user'],
             ['label' => 'Certificates', 'href' => 'certificates/templates.php'],
+            ['label' => 'Manage Rewards', 'href' => 'rewards/manage.php'],
             ['label' => 'Club Operations', 'href' => 'dashboard.php?panel=operations'],
             ['label' => 'Reports', 'href' => 'dashboard.php?panel=reports'],
         ]),
@@ -39,6 +41,7 @@ function dashboard_nav(?string $roleKey): array
             ['label' => 'Manage Events', 'href' => 'events/manage.php'],
             ['label' => 'Public Events', 'href' => 'events/index.php'],
             ['label' => 'Certificates', 'href' => 'certificates/templates.php'],
+            ['label' => 'Manage Rewards', 'href' => 'rewards/manage.php'],
             ['label' => 'QR Setup', 'href' => 'dashboard.php?panel=qr-placeholder'],
             ['label' => 'Attendance Tools', 'href' => 'dashboard.php?panel=attendance-placeholder'],
             ['label' => 'Technical Logs', 'href' => 'dashboard.php?panel=technical-placeholder'],
@@ -56,7 +59,7 @@ function dashboard_nav(?string $roleKey): array
         'club_member' => array_merge($common, [
             ['label' => 'Public Events', 'href' => 'events/index.php'],
             ['label' => 'My Registrations', 'href' => 'registrations/history.php'],
-            ['label' => 'My Rewards', 'href' => 'dashboard.php?panel=rewards-placeholder'],
+            ['label' => 'My Rewards', 'href' => 'rewards/dashboard.php'],
             ['label' => 'Certificates Verify', 'href' => 'certificates/verify.php'],
         ]),
         'guest_participant' => array_merge($common, [
