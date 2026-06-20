@@ -48,7 +48,9 @@ if ($eventId > 0) {
             et.id as team_id, et.team_name,
             (SELECT scanned_at FROM event_attendance WHERE event_id = :event_id_1 AND user_id = u.id AND attendance_type = 'check_in' ORDER BY scanned_at ASC LIMIT 1) as check_in_time,
             (SELECT scanned_at FROM event_attendance WHERE event_id = :event_id_2 AND user_id = u.id AND attendance_type = 'check_out' ORDER BY scanned_at DESC LIMIT 1) as check_out_time,
-            (SELECT attendance_type FROM event_attendance WHERE event_id = :event_id_3 AND user_id = u.id ORDER BY scanned_at DESC LIMIT 1) as current_status
+            (SELECT attendance_type FROM event_attendance WHERE event_id = :event_id_3 AND user_id = u.id ORDER BY scanned_at DESC LIMIT 1) as current_status,
+            (SELECT is_late FROM event_attendance WHERE event_id = :event_id_6 AND user_id = u.id AND attendance_type = 'check_in' ORDER BY scanned_at DESC LIMIT 1) as is_late,
+            (SELECT is_early_exit FROM event_attendance WHERE event_id = :event_id_7 AND user_id = u.id AND attendance_type = 'check_out' ORDER BY scanned_at DESC LIMIT 1) as is_early_exit
         FROM users u
         LEFT JOIN event_registrations er ON er.user_id = u.id AND er.event_id = :event_id_4 AND er.registration_type = 'individual' AND er.status = 'registered'
         LEFT JOIN event_team_members etm ON etm.user_id = u.id
@@ -63,6 +65,8 @@ if ($eventId > 0) {
         'event_id_3' => $eventId,
         'event_id_4' => $eventId,
         'event_id_5' => $eventId,
+        'event_id_6' => $eventId,
+        'event_id_7' => $eventId,
     ];
 
     $stmt = db()->prepare($sql);
@@ -97,7 +101,7 @@ if ($eventId > 0) {
         header('Content-Disposition: attachment; filename="attendance-report-event-' . $eventId . '.csv"');
         
         $out = fopen('php://output', 'w');
-        fputcsv($out, ['Participant Name', 'Email', 'Phone', 'Team', 'Status', 'Check-In Time', 'Check-Out Time']);
+        fputcsv($out, ['Participant Name', 'Email', 'Phone', 'Team', 'Status', 'Is Late', 'Is Early Exit', 'Check-In Time', 'Check-Out Time']);
         
         foreach ($participants as $p) {
             fputcsv($out, [
@@ -106,6 +110,8 @@ if ($eventId > 0) {
                 $p['phone'],
                 $p['team_name'] ?? 'Individual',
                 str_replace('_', ' ', strtoupper($p['current_status'] ?? 'absent')),
+                !empty($p['is_late']) ? 'LATE' : 'NO',
+                !empty($p['is_early_exit']) ? 'EARLY EXIT' : 'NO',
                 $p['check_in_time'] ?? '-',
                 $p['check_out_time'] ?? '-'
             ]);
@@ -231,6 +237,12 @@ require BASE_PATH . '/app/Views/layouts/dashboard_header.php';
                                 <span style="color: <?= $statusColor ?>; font-weight: 600; text-transform: uppercase; font-size: 0.85em;">
                                     <?= h(str_replace('_', ' ', $currentStatus)) ?>
                                 </span>
+                                <?php if (!empty($p['is_late'])): ?>
+                                    <span class="badge" style="background: #dc3545; color: #fff; padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.75em; font-weight: bold; margin-left: 5px;">LATE</span>
+                                <?php endif; ?>
+                                <?php if (!empty($p['is_early_exit'])): ?>
+                                    <span class="badge" style="background: #fd7e14; color: #fff; padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.75em; font-weight: bold; margin-left: 5px;">EARLY EXIT</span>
+                                <?php endif; ?>
                             </td>
                             <td style="padding: 1rem; color: #444; font-family: monospace;">
                                 <?= $p['check_in_time'] ? h(date('M d, H:i:s', strtotime($p['check_in_time']))) : '<span style="color:#ccc;">-</span>' ?>

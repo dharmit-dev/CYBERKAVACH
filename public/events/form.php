@@ -72,6 +72,16 @@ $eventTags = $event ? implode(', ', Event::tagsForEvent((int) $event['id'])) : '
             </div>
 
             <div class="field">
+                <label for="late_arrival_threshold_minutes">Late Arrival Threshold (mins)</label>
+                <input id="late_arrival_threshold_minutes" type="number" min="0" name="late_arrival_threshold_minutes" value="<?= h(old('late_arrival_threshold_minutes', (string) ($event['late_arrival_threshold_minutes'] ?? '15'))) ?>" required>
+            </div>
+
+            <div class="field">
+                <label for="early_exit_threshold_minutes">Early Exit Threshold (mins)</label>
+                <input id="early_exit_threshold_minutes" type="number" min="0" name="early_exit_threshold_minutes" value="<?= h(old('early_exit_threshold_minutes', (string) ($event['early_exit_threshold_minutes'] ?? '15'))) ?>" required>
+            </div>
+
+            <div class="field">
                 <label for="poster">Event poster</label>
                 <input id="poster" type="file" name="poster" accept="image/jpeg,image/png,image/webp">
                 <?php if (!empty($event['poster_path'])): ?><img class="poster-preview" src="<?= h(url($event['poster_path'])) ?>" alt="Event poster preview"><?php endif; ?>

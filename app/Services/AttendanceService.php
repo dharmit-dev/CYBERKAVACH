@@ -111,11 +111,33 @@ final class AttendanceService
         ?int $registrationId, 
         ?int $teamId
     ): void {
+        $event = Event::findById($eventId);
+        $isLate = 0;
+        $isEarlyExit = 0;
+
+        if ($type === 'check_in') {
+            if ($event) {
+                $eventStart = strtotime($event['event_date'] . ' ' . $event['start_time']);
+                $thresholdSeconds = (int) ($event['late_arrival_threshold_minutes'] ?? 15) * 60;
+                if (time() > $eventStart + $thresholdSeconds) {
+                    $isLate = 1;
+                }
+            }
+        } elseif ($type === 'check_out') {
+            if ($event) {
+                $eventEnd = strtotime($event['event_date'] . ' ' . $event['end_time']);
+                $thresholdSeconds = (int) ($event['early_exit_threshold_minutes'] ?? 15) * 60;
+                if (time() < $eventEnd - $thresholdSeconds) {
+                    $isEarlyExit = 1;
+                }
+            }
+        }
+
         $stmt = db()->prepare(
             'INSERT INTO event_attendance 
-                (event_id, registration_id, team_id, user_id, attendance_type, scanned_by_user_id, scanned_at, created_at)
+                (event_id, registration_id, team_id, user_id, attendance_type, is_late, is_early_exit, scanned_by_user_id, scanned_at, created_at)
              VALUES 
-                (:event_id, :registration_id, :team_id, :user_id, :type, :scanned_by, NOW(), NOW())'
+                (:event_id, :registration_id, :team_id, :user_id, :type, :is_late, :is_early_exit, :scanned_by, NOW(), NOW())'
         );
         $stmt->execute([
             'event_id' => $eventId,
@@ -123,6 +145,8 @@ final class AttendanceService
             'team_id' => $teamId,
             'user_id' => $userId,
             'type' => $type,
+            'is_late' => $isLate,
+            'is_early_exit' => $isEarlyExit,
             'scanned_by' => $scannerId,
         ]);
 

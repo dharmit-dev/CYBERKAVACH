@@ -71,7 +71,9 @@ if ($eventId > 0) {
         SELECT 
             u.id as user_id, u.full_name, u.email, u.phone,
             et.id as team_id, et.team_name,
-            (SELECT attendance_type FROM event_attendance WHERE event_id = :event_id AND user_id = u.id ORDER BY scanned_at DESC LIMIT 1) as current_status
+            (SELECT attendance_type FROM event_attendance WHERE event_id = :event_id AND user_id = u.id ORDER BY scanned_at DESC LIMIT 1) as current_status,
+            (SELECT is_late FROM event_attendance WHERE event_id = :event_id_3 AND user_id = u.id AND attendance_type = 'check_in' ORDER BY scanned_at DESC LIMIT 1) as is_late,
+            (SELECT is_early_exit FROM event_attendance WHERE event_id = :event_id_4 AND user_id = u.id AND attendance_type = 'check_out' ORDER BY scanned_at DESC LIMIT 1) as is_early_exit
         FROM users u
         LEFT JOIN event_registrations er ON er.user_id = u.id AND er.event_id = :event_id_1 AND er.registration_type = 'individual' AND er.status = 'registered'
         LEFT JOIN event_team_members etm ON etm.user_id = u.id
@@ -83,6 +85,8 @@ if ($eventId > 0) {
         'event_id' => $eventId,
         'event_id_1' => $eventId,
         'event_id_2' => $eventId,
+        'event_id_3' => $eventId,
+        'event_id_4' => $eventId,
     ];
 
     if ($search !== '') {
@@ -204,6 +208,12 @@ require BASE_PATH . '/app/Views/layouts/dashboard_header.php';
                                 <span style="color: <?= $statusColor ?>; font-weight: 600; text-transform: uppercase; font-size: 0.85em;">
                                     <?= h(str_replace('_', ' ', $currentStatus)) ?>
                                 </span>
+                                <?php if (!empty($p['is_late'])): ?>
+                                    <span class="badge" style="background: #dc3545; color: #fff; padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.75em; font-weight: bold; margin-left: 5px;">LATE</span>
+                                <?php endif; ?>
+                                <?php if (!empty($p['is_early_exit'])): ?>
+                                    <span class="badge" style="background: #fd7e14; color: #fff; padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.75em; font-weight: bold; margin-left: 5px;">EARLY EXIT</span>
+                                <?php endif; ?>
                             </td>
                             <td style="padding: 1rem;">
                                 <form method="post" action="<?= h(url('events/attendance.php?event_id='.$eventId.'&search='.urlencode($search).'&filter='.urlencode($filter))) ?>" style="display: flex; gap: 0.5rem; margin: 0;">
