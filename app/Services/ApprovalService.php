@@ -356,6 +356,26 @@ final class ApprovalService
                 ]);
             }
         }
+
+        if ($request['workflow_key'] === 'budget_request_approval' && $request['entity_type'] === 'budget_request') {
+            BudgetRequest::updateStatus((int) $request['entity_id'], 'approved');
+        }
+
+        if ($request['workflow_key'] === 'venue_resource_approval' && $request['entity_type'] === 'venue_resource_request') {
+            VenueResourceRequest::updateStatus((int) $request['entity_id'], 'approved');
+        }
+
+        if ($request['workflow_key'] === 'social_media_approval' && $request['entity_type'] === 'social_media_post') {
+            SocialMediaPost::updateStatus((int) $request['entity_id'], 'approved');
+        }
+
+        if ($request['workflow_key'] === 'content_publishing_approval' && $request['entity_type'] === 'content_post') {
+            ContentPost::updateStatus((int) $request['entity_id'], 'approved');
+        }
+
+        if ($request['workflow_key'] === 'external_collaboration_approval' && $request['entity_type'] === 'external_collaboration') {
+            ExternalCollaboration::updateStatus((int) $request['entity_id'], 'approved');
+        }
     }
 
     private static function applyRejectedEntityChange(array $request): void
@@ -377,6 +397,26 @@ final class ApprovalService
                     'created_by' => null,
                 ]);
             }
+        }
+
+        if ($request['workflow_key'] === 'budget_request_approval' && $request['entity_type'] === 'budget_request') {
+            BudgetRequest::updateStatus((int) $request['entity_id'], 'rejected');
+        }
+
+        if ($request['workflow_key'] === 'venue_resource_approval' && $request['entity_type'] === 'venue_resource_request') {
+            VenueResourceRequest::updateStatus((int) $request['entity_id'], 'rejected');
+        }
+
+        if ($request['workflow_key'] === 'social_media_approval' && $request['entity_type'] === 'social_media_post') {
+            SocialMediaPost::updateStatus((int) $request['entity_id'], 'rejected');
+        }
+
+        if ($request['workflow_key'] === 'content_publishing_approval' && $request['entity_type'] === 'content_post') {
+            ContentPost::updateStatus((int) $request['entity_id'], 'rejected');
+        }
+
+        if ($request['workflow_key'] === 'external_collaboration_approval' && $request['entity_type'] === 'external_collaboration') {
+            ExternalCollaboration::updateStatus((int) $request['entity_id'], 'rejected');
         }
     }
 
