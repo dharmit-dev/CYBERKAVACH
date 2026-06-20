@@ -24,7 +24,7 @@ function dashboard_nav(?string $roleKey): array
             ['label' => 'User Approvals', 'href' => 'approvals/index.php?type=user'],
             ['label' => 'Certificates', 'href' => 'certificates/templates.php'],
             ['label' => 'Manage Rewards', 'href' => 'rewards/manage.php'],
-            ['label' => 'Analytics Review', 'href' => 'dashboard.php?panel=analytics'],
+            ['label' => 'Analytics Review', 'href' => 'admin/analytics.php'],
             ['label' => 'Audit Oversight', 'href' => 'dashboard.php?panel=audit'],
         ]),
         'student_coordinator' => array_merge($common, [
@@ -35,7 +35,7 @@ function dashboard_nav(?string $roleKey): array
             ['label' => 'Certificates', 'href' => 'certificates/templates.php'],
             ['label' => 'Manage Rewards', 'href' => 'rewards/manage.php'],
             ['label' => 'Club Operations', 'href' => 'dashboard.php?panel=operations'],
-            ['label' => 'Reports', 'href' => 'dashboard.php?panel=reports'],
+            ['label' => 'Analytics Review', 'href' => 'admin/analytics.php'],
         ]),
         'tech_coordinator' => array_merge($common, [
             ['label' => 'Manage Events', 'href' => 'events/manage.php'],
