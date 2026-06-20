@@ -337,6 +337,7 @@ require BASE_PATH . '/app/Views/layouts/dashboard_header.php';
 
             <button class="button" type="submit" style="width: auto; min-width: 160px;">Submit Request</button>
         </form>
+    <?php endif; ?>
 
     <!-- TAB 2: VENUE & RESOURCES -->
     <?php if ($tab === 'venue'): ?>
@@ -384,6 +385,7 @@ require BASE_PATH . '/app/Views/layouts/dashboard_header.php';
 
             <button class="button" type="submit" style="width: auto; min-width: 160px;">Submit Request</button>
         </form>
+    <?php endif; ?>
 
     <!-- TAB 3: SOCIAL MEDIA POST -->
     <?php if ($tab === 'social'): ?>
@@ -425,6 +427,7 @@ require BASE_PATH . '/app/Views/layouts/dashboard_header.php';
 
             <button class="button" type="submit" style="width: auto; min-width: 160px;">Submit Request</button>
         </form>
+    <?php endif; ?>
 
     <!-- TAB 4: CONTENT PUBLISHING -->
     <?php if ($tab === 'content'): ?>
@@ -460,6 +463,7 @@ require BASE_PATH . '/app/Views/layouts/dashboard_header.php';
 
             <button class="button" type="submit" style="width: auto; min-width: 160px;">Submit Request</button>
         </form>
+    <?php endif; ?>
 
     <!-- TAB 5: EXTERNAL COLLABORATION -->
     <?php if ($tab === 'collab'): ?>
