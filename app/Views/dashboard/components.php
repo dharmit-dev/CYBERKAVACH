@@ -8,8 +8,13 @@ function dashboard_nav(?string $roleKey): array
 
     $common = [
         ['label' => 'Dashboard', 'href' => role_dashboard_path($roleKey)],
-        ['label' => 'Notifications', 'href' => 'notifications.php'],
     ];
+
+    if ($roleKey !== 'guest_participant' && $roleKey !== 'unknown') {
+        $common[] = ['label' => 'Submit Request', 'href' => 'approvals/create.php'];
+    }
+
+    $common[] = ['label' => 'Notifications', 'href' => 'notifications.php'];
 
     return match ($roleKey) {
         'faculty_coordinator' => array_merge($common, [
