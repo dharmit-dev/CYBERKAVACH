@@ -3,3 +3,5 @@ storage/logs/*
 vendor/
 node_modules/
 composer.phar
+composer.lock
+public/uploads/
