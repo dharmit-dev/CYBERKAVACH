@@ -1,0 +1,82 @@
+# CyberKavach: Smart Club Management System
+## Phase-wise Implementation & Security Hardening Report
+
+This report documents the detailed features, database additions, user interfaces, and cryptographic/concurrency security layers built for Phase 3 and Phase 4.
+
+---
+
+## 🛡️ Phase 3: Smart Certificate Generation & Verification System (Module 2)
+
+### 1. Functional Features
+*   **Database Schema (`008_certificates_schema.sql`)**: 
+    *   Created `certificate_templates` to store coordinate configurations (Name X/Y, Event X/Y, Date X/Y, Code X/Y) for layout alignment.
+    *   Created `certificates` table to store recipient metadata, unique codes, and cryptographic signatures.
+    *   Registered `certificates.manage` permissions and mapped them to Coordinator roles.
+*   **Core Processing Service (`CertificateService.php`)**:
+    *   Dynamic image generation using native PHP GD to load templates (PNG/JPG) and alignment draw.
+    *   Fail-safe system: Queries standard TrueType fonts (`Arial.ttf` on Windows, `DejaVuSans.ttf` on Linux), falling back safely to built-in GD raster fonts (`imagestring`) if no TTF files exist.
+    *   Bulk ZIP compiling: Bundles all generated images into a downloadable archive using `ZipArchive`.
+    *   Automated email dispatch: Triggers email delivery via `MailService` on successful generation.
+*   **Typography Coordinator View (`templates.php`)**:
+    *   Allowed coordinators to upload a base template and configure pixel coordinate offsets and size settings for custom layout rendering.
+*   **Bulk Project Generator (`generate.php`)**:
+    *   Supports loading participant lists directly from registered event tables or parsing external CSV spreadsheet uploads.
+*   **Public Verification Portal (`verify.php`)**:
+    *   A public search page that allows external bodies to input a certificate code to check details and download an authentic image.
+
+### 2. Bonus Security Features Added
+*   **Cryptographic Tamper-Prevention**: Generates a cryptographic digital signature for each certificate:
+    $$\text{HMAC-SHA256}(\text{code} \parallel \text{name} \parallel \text{email}, \text{secret\_key})$$
+    The verification page recalculates and validates this signature. Any manually modified data (like a forged name or event) triggers a security tamper alert.
+*   **Timing Attack Defenses**: Verifies signatures using constant-time string comparison (`hash_equals()`) to prevent attacker profiling of timing side-channels.
+*   **File Upload Validation**:
+    *   Strict MIME type checking using `finfo` (vets true file byte-headers, not file extensions).
+    *   File size constraints (<5MB).
+    *   Sanitized unique hash naming to block remote code executions (RCE) or local file inclusion directory path traversals.
+*   **Search Rate Limiter**: Implemented session-based rate limiting on the verification portal (max 30 searches per 10 minutes) to prevent bulk harvesting of certificate identifiers or database scraping.
+
+---
+
+## 🛠️ Root Redirect & General Bug Fixes
+
+### 1. Root Level Redirection (`index.php`)
+*   **Problem**: Directory listing is disabled (`Options -Indexes`) for security. Without a default root index file, users hitting `http://localhost/CYBERKAVACH/` directly received a `403 Forbidden` page.
+*   **Solution**: Created a root redirect [index.php](file:///c:/xampp/htdocs/CYBERKAVACH/index.php) that performs a `302 Found` header routing to `/public/`, immediately pointing browsers to the login/dashboard portal.
+
+### 2. Syntax Compilation Fix (`create.php`)
+*   **Problem**: In `public/approvals/create.php`, a syntax error (unexpected end of file) blocked coordinators from creating approval requests because conditional blocks for navigation tab panels were open.
+*   **Solution**: Identified and supplied the missing `<?php endif; ?>` statements, restoring normal compilation and operation.
+
+---
+
+## 🏆 Phase 4: Appreciation, Reward Points & Recognition System (Module 5)
+
+### 1. Functional Features
+*   **Database Schema (`009_rewards_recognition_schema.sql`)**:
+    *   Created `member_points` log ledger tracking additions, deductions, redemptions, and authorizing coordinators.
+    *   Created `badges` achievement reference and `user_badges` earned tables.
+    *   Created `reward_items` stock/cost catalog.
+    *   Registered `rewards.manage` permissions.
+*   **Core Points Service (`PointsService.php`)**:
+    *   Handles points additions and automatic checks for achievement badge progression.
+    *   Fetches dynamic leaderboard statistics for competitive gamification.
+*   **Automated Attendance Triggers (`AttendanceService.php`)**:
+    *   Integrates points allocation directly into event checkout tracking:
+        *   **+15 points** base for attending.
+        *   **-5 points** warning penalty for late check-ins (`is_late`).
+        *   **-5 points** warning penalty for early check-outs (`is_early_exit`).
+*   **Points Management View (`manage.php`)**:
+    *   A coordinator-only dashboard to search members, adjust points manually with reason statements, and view global transaction streams.
+*   **Member Rewards Dashboard (`dashboard.php`)**:
+    *   Renders points balances, earned achievements, milestone progress meters, points statements, leaderboards, and a catalog to redeem prizes (stickers, vouchers, hoodies).
+
+### 2. Bonus Security Features Added
+*   **Double-Spending Concurrency Prevention**: To block race conditions where a member rapidly submits multiple redemption requests to spend more points than they have, or claim items out-of-stock, the service wraps redemptions in a database transaction with a pessimistic lock:
+    ```sql
+    SELECT * FROM reward_items WHERE id = :id FOR UPDATE;
+    SELECT SUM(points) FROM member_points WHERE user_id = :user_id FOR UPDATE;
+    ```
+    If points are insufficient or stock is depleted, the transaction immediately rolls back.
+*   **Role Clearance Gating**: Access to coordinator points management is strictly verified via role checking middleware (`require_role(...)`).
+*   **Sanitized Points Bounds**: Validates inputs to ensure only valid non-zero values are requested, preventing integer underflow attacks.
+*   **Failsafe Audit Logging**: Points adjustments and prize claims are permanently logged inside `audit_logs` for tracking.
