@@ -6,6 +6,7 @@ define('BASE_PATH', dirname(__DIR__, 2));
 
 require_once BASE_PATH . '/app/Core/env.php';
 require_once BASE_PATH . '/app/Helpers/functions.php';
+require_once BASE_PATH . '/app/Middleware/headers.php';
 
 load_env(BASE_PATH . '/.env');
 
