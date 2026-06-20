@@ -13,8 +13,7 @@
   <a href="#-tech-stack">Tech Stack</a> •
   <a href="#-installation--setup">Setup</a> •
   <a href="#-sso-sandbox">SSO Sandbox</a> •
-  <a href="#-security-architecture">Security</a> •
-  <a href="#-credentials">Credentials</a>
+  <a href="#-security-architecture">Security</a>
 </p>
 
 ---
@@ -36,7 +35,7 @@
 ### 📜 2. Cryptographic Certificate System
 * **GD Vector Rendering**: Dynamic participant template composition using PHP GD.
 * **Anti-Forgery Verification**: Every certificate features a cryptographic signature calculated as:
-  $$\text{HMAC-SHA256}(\text{code} \parallel \text{name} \parallel \text{email}, \text{secret\_key})$$
+  `HMAC-SHA256(code || name || email, secret_key)`
 * **Timing-Attack Defenses**: Uses constant-time string comparison (`hash_equals`) to verify signatures.
 * **Rate Limiting**: Sessions are protected by request limiting (max 30 searches per 10 mins).
 
@@ -121,20 +120,6 @@ If `GOOGLE_CLIENT_ID` is empty in `.env`, clicking **Sign in with Google** redir
 * **Cross-Site Scripting (XSS)**: Mitigated by HTML escaping values via `h()`.
 * **CSRF Mitigation**: Enforces unique transaction state validation on OAuth redirections and token input headers on form submissions.
 * **Session Safety**: Configures native PHP session cookies with `HttpOnly`, `SameSite=Lax`, and `Secure` flags.
-
----
-
-## 👤 Credentials
-
-The following seeded developer accounts are available:
-
-| Role Name | Email | Password |
-|---|---|---|
-| **Faculty Coordinator** | `admin@cyberkavach.local` | `Password123!` |
-| **Student Coordinator** | `student@cyberkavach.local` | `Password123!` |
-| **Tech Coordinator** | `tech@cyberkavach.local` | `Password123!` |
-| **Club Member** | `member@cyberkavach.local` | `Password123!` |
-| **Guest Participant** | `guest@cyberkavach.local` | `Password123!` |
 
 ---
 

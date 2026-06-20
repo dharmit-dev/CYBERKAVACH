@@ -25,8 +25,7 @@ This report documents the detailed features, database additions, user interfaces
     *   A public search page that allows external bodies to input a certificate code to check details and download an authentic image.
 
 ### 2. Bonus Security Features Added
-*   **Cryptographic Tamper-Prevention**: Generates a cryptographic digital signature for each certificate:
-    $$\text{HMAC-SHA256}(\text{code} \parallel \text{name} \parallel \text{email}, \text{secret\_key})$$
+*   **Cryptographic Tamper-Prevention**: Generates a cryptographic digital signature for each certificate: `HMAC-SHA256(code || name || email, secret_key)`.
     The verification page recalculates and validates this signature. Any manually modified data (like a forged name or event) triggers a security tamper alert.
 *   **Timing Attack Defenses**: Verifies signatures using constant-time string comparison (`hash_equals()`) to prevent attacker profiling of timing side-channels.
 *   **File Upload Validation**:
