@@ -2,3 +2,4 @@
 storage/logs/*
 vendor/
 node_modules/
+composer.phar
