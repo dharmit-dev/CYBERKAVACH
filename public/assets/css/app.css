@@ -328,6 +328,16 @@ textarea:focus {
     text-decoration: none;
 }
 
+.side-nav a.active {
+    background: rgba(255, 255, 255, 0.18);
+    color: #ffffff;
+    font-weight: 700;
+    border-left: 3px solid #81d4fa;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    padding-left: 9px; /* Offset the 3px border to maintain visual alignment */
+}
+
 .main-area {
     min-width: 0;
 }
@@ -683,4 +693,46 @@ th {
     .panel-heading {
         display: grid;
     }
+}
+
+/* Premium Analytics & Badge Styling */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 9999px;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.badge-pending {
+    background-color: #fef3c7;
+    color: #d97706;
+}
+.badge-review {
+    background-color: #e0f2fe;
+    color: #0284c7;
+}
+.badge-success {
+    background-color: #d1fae5;
+    color: #059669;
+}
+.badge-danger {
+    background-color: #fee2e2;
+    color: #dc2626;
+}
+.badge-secondary {
+    background-color: #f3f4f6;
+    color: #4b5563;
+}
+
+.analytics-card {
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 12px rgba(16, 42, 67, 0.04) !important;
+}
+.analytics-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 28px rgba(16, 42, 67, 0.08) !important;
 }

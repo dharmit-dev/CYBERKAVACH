@@ -24,7 +24,10 @@ $unreadCount = Notification::countUnreadForUser((int) $user['id']);
         </div>
         <nav class="side-nav" aria-label="Role navigation">
             <?php foreach ($navItems as $item): ?>
-                <a href="<?= h(url($item['href'])) ?>"><?= h($item['label']) ?></a>
+                <?php
+                $isActive = is_nav_item_active($item['href']);
+                ?>
+                <a href="<?= h(url($item['href'])) ?>" class="<?= $isActive ? 'active' : '' ?>"><?= h($item['label']) ?></a>
             <?php endforeach; ?>
         </nav>
     </aside>

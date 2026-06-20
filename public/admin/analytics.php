@@ -90,33 +90,33 @@ require BASE_PATH . '/app/Views/layouts/dashboard_header.php';
 
 <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
     <!-- Metric summary blocks -->
-    <div class="card" style="padding: 1.5rem; text-align: center;">
-        <span class="muted" style="font-size: 0.85em; text-transform: uppercase; font-weight: bold;">Active Registrations</span>
-        <h2 style="font-size: 2.2rem; margin: 0.5rem 0; color: var(--primary);"><?= $totalRegs ?></h2>
-        <small class="muted">Indiv: <?= $indivRegs ?> | Teams: <?= $teamRegs ?></small>
+    <div class="card analytics-card" style="padding: 1.5rem; border-left: 4px solid #135f7a; background: linear-gradient(135deg, #ffffff, #f0f7f9); text-align: left; position: relative; overflow: hidden;">
+        <span class="muted" style="font-size: 0.85em; text-transform: uppercase; font-weight: bold; letter-spacing: 0.05em;">Active Registrations</span>
+        <h2 style="font-size: 2.4rem; margin: 0.5rem 0; color: #135f7a; font-weight: 800;"><?= $totalRegs ?></h2>
+        <small class="muted" style="font-size: 0.85em;">Indiv: <strong><?= $indivRegs ?></strong> | Teams: <strong><?= $teamRegs ?></strong></small>
     </div>
-    <div class="card" style="padding: 1.5rem; text-align: center;">
-        <span class="muted" style="font-size: 0.85em; text-transform: uppercase; font-weight: bold;">Attendance Check-ins</span>
-        <h2 style="font-size: 2.2rem; margin: 0.5rem 0; color: #2e7d32;"><?= $checkins ?></h2>
-        <small class="muted">Late Check-ins: <?= $lateCount ?></small>
+    <div class="card analytics-card" style="padding: 1.5rem; border-left: 4px solid #10b981; background: linear-gradient(135deg, #ffffff, #eefdf5); text-align: left; position: relative; overflow: hidden;">
+        <span class="muted" style="font-size: 0.85em; text-transform: uppercase; font-weight: bold; letter-spacing: 0.05em;">Attendance Check-ins</span>
+        <h2 style="font-size: 2.4rem; margin: 0.5rem 0; color: #10b981; font-weight: 800;"><?= $checkins ?></h2>
+        <small class="muted" style="font-size: 0.85em;">Late Check-ins: <strong style="color: #b45309;"><?= $lateCount ?></strong></small>
     </div>
-    <div class="card" style="padding: 1.5rem; text-align: center;">
-        <span class="muted" style="font-size: 0.85em; text-transform: uppercase; font-weight: bold;">Reward Points Issued</span>
-        <h2 style="font-size: 2.2rem; margin: 0.5rem 0; color: #f59e0b;"><?= $pointsIssued ?> pts</h2>
-        <small class="muted">Redeemed: <?= $pointsSpent ?> pts</small>
+    <div class="card analytics-card" style="padding: 1.5rem; border-left: 4px solid #f59e0b; background: linear-gradient(135deg, #ffffff, #fffbeb); text-align: left; position: relative; overflow: hidden;">
+        <span class="muted" style="font-size: 0.85em; text-transform: uppercase; font-weight: bold; letter-spacing: 0.05em;">Reward Points Issued</span>
+        <h2 style="font-size: 2.4rem; margin: 0.5rem 0; color: #d97706; font-weight: 800;"><?= $pointsIssued ?> <span style="font-size: 0.5em; font-weight: 500;">pts</span></h2>
+        <small class="muted" style="font-size: 0.85em;">Redeemed: <strong><?= $pointsSpent ?></strong> pts</small>
     </div>
-    <div class="card" style="padding: 1.5rem; text-align: center;">
-        <span class="muted" style="font-size: 0.85em; text-transform: uppercase; font-weight: bold;">Avg. Approval Velocity</span>
-        <h2 style="font-size: 2.2rem; margin: 0.5rem 0; color: #3b82f6;"><?= $avgApprovalHoursVal ?> hrs</h2>
-        <small class="muted">Resolved Requests</small>
+    <div class="card analytics-card" style="padding: 1.5rem; border-left: 4px solid #3b82f6; background: linear-gradient(135deg, #ffffff, #eff6ff); text-align: left; position: relative; overflow: hidden;">
+        <span class="muted" style="font-size: 0.85em; text-transform: uppercase; font-weight: bold; letter-spacing: 0.05em;">Avg. Approval Velocity</span>
+        <h2 style="font-size: 2.4rem; margin: 0.5rem 0; color: #2563eb; font-weight: 800;"><?= $avgApprovalHoursVal ?> <span style="font-size: 0.5em; font-weight: 500;">hrs</span></h2>
+        <small class="muted" style="font-size: 0.85em;">Resolved Requests</small>
     </div>
 </div>
 
 <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
     <!-- Registration popular events -->
-    <div class="card">
-        <h3>Popular Events (Registrations)</h3>
-        <p class="muted" style="margin-bottom: 1.5rem;">Events with the highest numbers of confirmed registrations.</p>
+    <div class="card analytics-card" style="padding: 1.75rem;">
+        <h3 style="margin-top: 0; font-size: 1.25rem; font-weight: 700; color: var(--ink);">Popular Events (Registrations)</h3>
+        <p class="muted" style="margin-bottom: 1.5rem; font-size: 0.9em;">Events with the highest numbers of confirmed registrations.</p>
         
         <div style="display: flex; flex-direction: column; gap: 1.25rem;">
             <?php if ($popEvents === []): ?>
@@ -128,12 +128,12 @@ require BASE_PATH . '/app/Views/layouts/dashboard_header.php';
                 $pct = (int) (( (int) $ev['reg_count'] / $maxVal) * 100);
                 ?>
                 <div>
-                    <div style="display: flex; justify-content: space-between; font-size: 0.9em; margin-bottom: 0.35rem;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.9em; margin-bottom: 0.45rem;">
                         <strong><?= h($ev['title']) ?></strong>
-                        <span style="font-weight: bold;"><?= h((string) $ev['reg_count']) ?> members</span>
+                        <span style="font-weight: bold; color: var(--primary);"><?= h((string) $ev['reg_count']) ?> members</span>
                     </div>
-                    <div style="background: #e2e8f0; height: 12px; border-radius: 6px; overflow: hidden;">
-                        <div style="background: var(--primary); width: <?= $pct ?>%; height: 100%; border-radius: 6px;"></div>
+                    <div style="background: #e2e8f0; height: 12px; border-radius: 999px; overflow: hidden; box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);">
+                        <div style="background: linear-gradient(90deg, #135f7a, #38bdf8); width: <?= $pct ?>%; height: 100%; border-radius: 999px; transition: width 0.6s ease;"></div>
                     </div>
                 </div>
             <?php endforeach; ?>
@@ -141,52 +141,52 @@ require BASE_PATH . '/app/Views/layouts/dashboard_header.php';
     </div>
 
     <!-- Attendance Performance -->
-    <div class="card">
-        <h3>Attendance & Punctuality Indicators</h3>
-        <p class="muted" style="margin-bottom: 1.5rem;">Audit metrics for session check-ins, check-outs, and exit timings.</p>
+    <div class="card analytics-card" style="padding: 1.75rem;">
+        <h3 style="margin-top: 0; font-size: 1.25rem; font-weight: 700; color: var(--ink);">Attendance & Punctuality Indicators</h3>
+        <p class="muted" style="margin-bottom: 1.5rem; font-size: 0.9em;">Audit metrics for session check-ins, check-outs, and exit timings.</p>
         
         <div style="display: flex; flex-direction: column; gap: 1.25rem;">
             <!-- Check-ins vs checkouts -->
             <div>
-                <div style="display: flex; justify-content: space-between; font-size: 0.95em; margin-bottom: 0.35rem;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.95em; margin-bottom: 0.45rem;">
                     <span>Completed Cycles (Check-out Rate)</span>
-                    <strong style="color: #2e7d32;"><?= $checkins > 0 ? (int) (($checkouts / $checkins) * 100) : 0 ?>%</strong>
+                    <strong style="color: #10b981; font-weight: 700;"><?= $checkins > 0 ? (int) (($checkouts / $checkins) * 100) : 0 ?>%</strong>
                 </div>
-                <div style="background: #e2e8f0; height: 12px; border-radius: 6px; overflow: hidden; display: flex;">
+                <div style="background: #e2e8f0; height: 12px; border-radius: 999px; overflow: hidden; box-shadow: inset 0 1px 2px rgba(0,0,0,0.05); display: flex;">
                     <?php 
                     $coPct = $checkins > 0 ? (int) (($checkouts / $checkins) * 100) : 0;
                     ?>
-                    <div style="background: #2e7d32; width: <?= $coPct ?>%; height: 100%;"></div>
+                    <div style="background: linear-gradient(90deg, #10b981, #34d399); width: <?= $coPct ?>%; height: 100%; border-radius: 999px; transition: width 0.6s ease;"></div>
                 </div>
                 <small class="muted"><?= $checkouts ?> checkouts out of <?= $checkins ?> check-ins</small>
             </div>
 
             <!-- Late arrival stats -->
             <div>
-                <div style="display: flex; justify-content: space-between; font-size: 0.95em; margin-bottom: 0.35rem;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.95em; margin-bottom: 0.45rem;">
                     <span>Late Arrivals Rate</span>
-                    <strong style="color: #c62828;"><?= $checkins > 0 ? (int) (($lateCount / $checkins) * 100) : 0 ?>%</strong>
+                    <strong style="color: #ef4444; font-weight: 700;"><?= $checkins > 0 ? (int) (($lateCount / $checkins) * 100) : 0 ?>%</strong>
                 </div>
-                <div style="background: #e2e8f0; height: 12px; border-radius: 6px; overflow: hidden;">
+                <div style="background: #e2e8f0; height: 12px; border-radius: 999px; overflow: hidden; box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);">
                     <?php 
                     $latePct = $checkins > 0 ? (int) (($lateCount / $checkins) * 100) : 0;
                     ?>
-                    <div style="background: #c62828; width: <?= $latePct ?>%; height: 100%;"></div>
+                    <div style="background: linear-gradient(90deg, #ef4444, #f87171); width: <?= $latePct ?>%; height: 100%; border-radius: 999px; transition: width 0.6s ease;"></div>
                 </div>
                 <small class="muted"><?= $lateCount ?> check-ins logged after configuration thresholds</small>
             </div>
 
             <!-- Early exits stats -->
             <div>
-                <div style="display: flex; justify-content: space-between; font-size: 0.95em; margin-bottom: 0.35rem;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.95em; margin-bottom: 0.45rem;">
                     <span>Early Exits Rate</span>
-                    <strong style="color: #fd7e14;"><?= $checkouts > 0 ? (int) (($earlyExits / $checkouts) * 100) : 0 ?>%</strong>
+                    <strong style="color: #f97316; font-weight: 700;"><?= $checkouts > 0 ? (int) (($earlyExits / $checkouts) * 100) : 0 ?>%</strong>
                 </div>
-                <div style="background: #e2e8f0; height: 12px; border-radius: 6px; overflow: hidden;">
+                <div style="background: #e2e8f0; height: 12px; border-radius: 999px; overflow: hidden; box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);">
                     <?php 
                     $earlyPct = $checkouts > 0 ? (int) (($earlyExits / $checkouts) * 100) : 0;
                     ?>
-                    <div style="background: #fd7e14; width: <?= $earlyPct ?>%; height: 100%;"></div>
+                    <div style="background: linear-gradient(90deg, #f97316, #fbcfe8); width: <?= $earlyPct ?>%; height: 100%; border-radius: 999px; transition: width 0.6s ease;"></div>
                 </div>
                 <small class="muted"><?= $earlyExits ?> checkouts logged before configured end timings</small>
             </div>
@@ -196,9 +196,9 @@ require BASE_PATH . '/app/Views/layouts/dashboard_header.php';
 
 <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
     <!-- Points log category analysis -->
-    <div class="card">
-        <h3>Appreciation Points Allocation Analysis</h3>
-        <p class="muted" style="margin-bottom: 1.5rem;">Comparison chart representing points issued by operational categories.</p>
+    <div class="card analytics-card" style="padding: 1.75rem;">
+        <h3 style="margin-top: 0; font-size: 1.25rem; font-weight: 700; color: var(--ink);">Appreciation Points Allocation Analysis</h3>
+        <p class="muted" style="margin-bottom: 1.5rem; font-size: 0.9em;">Comparison chart representing points issued by operational categories.</p>
 
         <div style="display: flex; flex-direction: column; gap: 1.25rem;">
             <?php if ($categoryPoints === []): ?>
@@ -215,15 +215,16 @@ require BASE_PATH . '/app/Views/layouts/dashboard_header.php';
                 $points = (int) $c['cat_points'];
                 $val = abs($points);
                 $pct = (int) (($val / $catMax) * 100);
-                $color = $points > 0 ? '#f59e0b' : '#ef4444';
+                $colorGrad = $points > 0 ? 'linear-gradient(90deg, #d97706, #fbbf24)' : 'linear-gradient(90deg, #ef4444, #f87171)';
+                $colorText = $points > 0 ? '#d97706' : '#ef4444';
                 ?>
                 <div>
-                    <div style="display: flex; justify-content: space-between; font-size: 0.9em; margin-bottom: 0.35rem;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.9em; margin-bottom: 0.45rem;">
                         <strong><?= h(str_replace('_', ' ', ucfirst($c['category']))) ?></strong>
-                        <span style="font-weight: bold; color: <?= $color ?>;"><?= $points > 0 ? '+' : '' ?><?= h((string) $points) ?> pts</span>
+                        <span style="font-weight: bold; color: <?= $colorText ?>;"><?= $points > 0 ? '+' : '' ?><?= h((string) $points) ?> pts</span>
                     </div>
-                    <div style="background: #e2e8f0; height: 12px; border-radius: 6px; overflow: hidden;">
-                        <div style="background: <?= $color ?>; width: <?= $pct ?>%; height: 100%;"></div>
+                    <div style="background: #e2e8f0; height: 12px; border-radius: 999px; overflow: hidden; box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);">
+                        <div style="background: <?= $colorGrad ?>; width: <?= $pct ?>%; height: 100%; border-radius: 999px; transition: width 0.6s ease;"></div>
                     </div>
                 </div>
             <?php endforeach; ?>
@@ -231,9 +232,9 @@ require BASE_PATH . '/app/Views/layouts/dashboard_header.php';
     </div>
 
     <!-- Badge Unlocks distribution -->
-    <div class="card">
-        <h3>Badge Milestone Distribution</h3>
-        <p class="muted" style="margin-bottom: 1.5rem;">Aggregated statistics of specific milestones unlocked by members.</p>
+    <div class="card analytics-card" style="padding: 1.75rem;">
+        <h3 style="margin-top: 0; font-size: 1.25rem; font-weight: 700; color: var(--ink);">Badge Milestone Distribution</h3>
+        <p class="muted" style="margin-bottom: 1.5rem; font-size: 0.9em;">Aggregated statistics of specific milestones unlocked by members.</p>
 
         <div style="display: flex; flex-direction: column; gap: 1.25rem;">
             <?php if ($badgeUnlocks === []): ?>
@@ -245,12 +246,12 @@ require BASE_PATH . '/app/Views/layouts/dashboard_header.php';
                 $pct = (int) (((int) $bu['unlock_count'] / $buMax) * 100);
                 ?>
                 <div>
-                    <div style="display: flex; justify-content: space-between; font-size: 0.9em; margin-bottom: 0.35rem;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.9em; margin-bottom: 0.45rem;">
                         <strong><?= h($bu['name']) ?></strong>
-                        <span style="font-weight: bold;"><?= h((string) $bu['unlock_count']) ?> members</span>
+                        <span style="font-weight: bold; color: #059669;"><?= h((string) $bu['unlock_count']) ?> members</span>
                     </div>
-                    <div style="background: #e2e8f0; height: 12px; border-radius: 6px; overflow: hidden;">
-                        <div style="background: #10b981; width: <?= $pct ?>%; height: 100%;"></div>
+                    <div style="background: #e2e8f0; height: 12px; border-radius: 999px; overflow: hidden; box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);">
+                        <div style="background: linear-gradient(90deg, #10b981, #6ee7b7); width: <?= $pct ?>%; height: 100%; border-radius: 999px; transition: width 0.6s ease;"></div>
                     </div>
                 </div>
             <?php endforeach; ?>
@@ -260,67 +261,62 @@ require BASE_PATH . '/app/Views/layouts/dashboard_header.php';
 
 <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem;">
     <!-- Workflow status counts -->
-    <div class="card">
-        <h3>Approval Queue Status Matrix</h3>
-        <p class="muted" style="margin-bottom: 1.5rem;">Splits representing pending, approved, or returned requests.</p>
+    <div class="card analytics-card" style="padding: 1.75rem;">
+        <h3 style="margin-top: 0; font-size: 1.25rem; font-weight: 700; color: var(--ink); margin-bottom: 0.5rem;">Approval Queue Status Matrix</h3>
+        <p class="muted" style="margin-bottom: 1.5rem; font-size: 0.9em;">Splits representing pending, approved, or returned requests.</p>
 
         <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.95em;">
             <thead>
-                <tr style="border-bottom: 2px solid #eee;">
-                    <th style="padding: 0.5rem 0;">Queue State</th>
-                    <th style="padding: 0.5rem 0; text-align: right;">Count</th>
+                <tr style="border-bottom: 2px solid var(--line); color: var(--muted); font-size: 0.85em; text-transform: uppercase; letter-spacing: 0.05em;">
+                    <th style="padding: 0.75rem 0.5rem; font-weight: 700;">Queue State</th>
+                    <th style="padding: 0.75rem 0.5rem; text-align: right; font-weight: 700;">Count</th>
                 </tr>
             </thead>
             <tbody>
-                <tr style="border-bottom: 1px solid #eee;">
-                    <td style="padding: 0.6rem 0; display: flex; align-items: center; gap: 0.5rem;">
-                        <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #ffc107;"></span>
-                        Pending
+                <tr style="border-bottom: 1px solid var(--line); transition: background 0.15s ease;">
+                    <td style="padding: 0.75rem 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <span class="badge badge-pending">Pending</span>
                     </td>
-                    <td style="padding: 0.6rem 0; text-align: right; font-weight: bold;"><?= (int) ($statusMap['pending'] ?? 0) ?></td>
+                    <td style="padding: 0.75rem 0.5rem; text-align: right; font-weight: bold; font-size: 1.1em; color: var(--ink);"><?= (int) ($statusMap['pending'] ?? 0) ?></td>
                 </tr>
-                <tr style="border-bottom: 1px solid #eee;">
-                    <td style="padding: 0.6rem 0; display: flex; align-items: center; gap: 0.5rem;">
-                        <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #17a2b8;"></span>
-                        Under Review
+                <tr style="border-bottom: 1px solid var(--line); transition: background 0.15s ease;">
+                    <td style="padding: 0.75rem 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <span class="badge badge-review">Under Review</span>
                     </td>
-                    <td style="padding: 0.6rem 0; text-align: right; font-weight: bold;"><?= (int) ($statusMap['under_review'] ?? 0) ?></td>
+                    <td style="padding: 0.75rem 0.5rem; text-align: right; font-weight: bold; font-size: 1.1em; color: var(--ink);"><?= (int) ($statusMap['under_review'] ?? 0) ?></td>
                 </tr>
-                <tr style="border-bottom: 1px solid #eee;">
-                    <td style="padding: 0.6rem 0; display: flex; align-items: center; gap: 0.5rem;">
-                        <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #28a745;"></span>
-                        Approved
+                <tr style="border-bottom: 1px solid var(--line); transition: background 0.15s ease;">
+                    <td style="padding: 0.75rem 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <span class="badge badge-success">Approved</span>
                     </td>
-                    <td style="padding: 0.6rem 0; text-align: right; font-weight: bold;"><?= (int) ($statusMap['approved'] ?? 0) ?></td>
+                    <td style="padding: 0.75rem 0.5rem; text-align: right; font-weight: bold; font-size: 1.1em; color: var(--ink);"><?= (int) ($statusMap['approved'] ?? 0) ?></td>
                 </tr>
-                <tr style="border-bottom: 1px solid #eee;">
-                    <td style="padding: 0.6rem 0; display: flex; align-items: center; gap: 0.5rem;">
-                        <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #dc3545;"></span>
-                        Rejected
+                <tr style="border-bottom: 1px solid var(--line); transition: background 0.15s ease;">
+                    <td style="padding: 0.75rem 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <span class="badge badge-danger">Rejected</span>
                     </td>
-                    <td style="padding: 0.6rem 0; text-align: right; font-weight: bold;"><?= (int) ($statusMap['rejected'] ?? 0) ?></td>
+                    <td style="padding: 0.75rem 0.5rem; text-align: right; font-weight: bold; font-size: 1.1em; color: var(--ink);"><?= (int) ($statusMap['rejected'] ?? 0) ?></td>
                 </tr>
-                <tr style="border-bottom: 1px solid #eee;">
-                    <td style="padding: 0.6rem 0; display: flex; align-items: center; gap: 0.5rem;">
-                        <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #6c757d;"></span>
-                        Returned / Returned
+                <tr style="border-bottom: 1px solid var(--line); transition: background 0.15s ease;">
+                    <td style="padding: 0.75rem 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <span class="badge badge-secondary">Returned</span>
                     </td>
-                    <td style="padding: 0.6rem 0; text-align: right; font-weight: bold;"><?= (int) ($statusMap['returned'] ?? 0) ?></td>
+                    <td style="padding: 0.75rem 0.5rem; text-align: right; font-weight: bold; font-size: 1.1em; color: var(--ink);"><?= (int) ($statusMap['returned'] ?? 0) ?></td>
                 </tr>
             </tbody>
         </table>
     </div>
 
     <!-- Coordinator workloads -->
-    <div class="card">
-        <h3>Coordinator Approval Activity</h3>
-        <p class="muted" style="margin-bottom: 1.5rem;">Activity log metric of reviews processed by individual coordinators.</p>
+    <div class="card analytics-card" style="padding: 1.75rem;">
+        <h3 style="margin-top: 0; font-size: 1.25rem; font-weight: 700; color: var(--ink); margin-bottom: 0.5rem;">Coordinator Approval Activity</h3>
+        <p class="muted" style="margin-bottom: 1.5rem; font-size: 0.9em;">Activity log metric of reviews processed by individual coordinators.</p>
 
         <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.95em;">
             <thead>
-                <tr style="border-bottom: 2px solid #eee;">
-                    <th style="padding: 0.5rem 0;">Coordinator Name</th>
-                    <th style="padding: 0.5rem 0; text-align: right;">Decisions Logged</th>
+                <tr style="border-bottom: 2px solid var(--line); color: var(--muted); font-size: 0.85em; text-transform: uppercase; letter-spacing: 0.05em;">
+                    <th style="padding: 0.75rem 0.5rem; font-weight: 700;">Coordinator Name</th>
+                    <th style="padding: 0.75rem 0.5rem; text-align: right; font-weight: 700;">Decisions Logged</th>
                 </tr>
             </thead>
             <tbody>
@@ -330,9 +326,9 @@ require BASE_PATH . '/app/Views/layouts/dashboard_header.php';
                     </tr>
                 <?php endif; ?>
                 <?php foreach ($coordWorkload as $cw): ?>
-                    <tr style="border-bottom: 1px solid #eee;">
-                        <td style="padding: 0.6rem 0;"><strong><?= h($cw['full_name']) ?></strong></td>
-                        <td style="padding: 0.6rem 0; text-align: right; font-weight: bold;"><?= h((string) $cw['action_count']) ?></td>
+                    <tr style="border-bottom: 1px solid var(--line); transition: background 0.15s ease;">
+                        <td style="padding: 0.75rem 0.5rem;"><strong style="color: var(--ink);"><?= h($cw['full_name']) ?></strong></td>
+                        <td style="padding: 0.75rem 0.5rem; text-align: right; font-weight: bold; font-size: 1.05em; color: var(--primary);"><?= h((string) $cw['action_count']) ?></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>

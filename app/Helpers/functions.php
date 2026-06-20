@@ -195,3 +195,49 @@ function user_has_permission(array $user, string $permissionKey): bool
 
     return (int) $stmt->fetchColumn() > 0;
 }
+
+function is_nav_item_active(string $href): bool
+{
+    $requestUri = $_SERVER['REQUEST_URI'] ?? $_SERVER['SCRIPT_NAME'] ?? '';
+    
+    // Extract path
+    $currentPath = parse_url($requestUri, PHP_URL_PATH) ?? '';
+    $currentPath = rtrim(preg_replace('#/+#', '/', $currentPath), '/');
+
+    $targetUrl = url($href);
+    $targetPath = parse_url($targetUrl, PHP_URL_PATH) ?? '';
+    $targetPath = rtrim(preg_replace('#/+#', '/', $targetPath), '/');
+
+    $currentPath = strtolower($currentPath);
+    $targetPath = strtolower($targetPath);
+
+    if ($currentPath === '' || $targetPath === '') {
+        return false;
+    }
+    
+    if (!str_ends_with($currentPath, $targetPath) && !str_ends_with($targetPath, $currentPath)) {
+        return false;
+    }
+
+    // Compare query parameters
+    $currentQueryStr = parse_url($requestUri, PHP_URL_QUERY) ?? '';
+    parse_str($currentQueryStr, $currentQuery);
+
+    $targetQueryStr = parse_url($targetUrl, PHP_URL_QUERY) ?? '';
+    parse_str($targetQueryStr, $targetQuery);
+
+    if (!empty($targetQuery)) {
+        foreach ($targetQuery as $key => $val) {
+            if (!isset($currentQuery[$key]) || (string)$currentQuery[$key] !== (string)$val) {
+                return false;
+            }
+        }
+    } else {
+        if (!empty($currentQuery) && (isset($currentQuery['type']) || isset($currentQuery['panel']))) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
