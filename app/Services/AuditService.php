@@ -51,4 +51,38 @@ final class AuditService
             'user_agent' => user_agent(),
         ]);
     }
+
+    public static function listAll(string $module = '', string $action = '', ?int $userId = null, int $limit = 100): array
+    {
+        $sql = "SELECT al.*, u.full_name as actor_name, u.email as actor_email
+                FROM audit_logs al
+                LEFT JOIN users u ON u.id = al.user_id";
+        $where = [];
+        $params = [];
+
+        if ($module !== '') {
+            $where[] = "al.module = :module";
+            $params['module'] = $module;
+        }
+
+        if ($action !== '') {
+            $where[] = "al.action = :action";
+            $params['action'] = $action;
+        }
+
+        if ($userId !== null) {
+            $where[] = "al.user_id = :user_id";
+            $params['user_id'] = $userId;
+        }
+
+        if ($where !== []) {
+            $sql .= " WHERE " . implode(" AND ", $where);
+        }
+
+        $sql .= " ORDER BY al.created_at DESC LIMIT " . (int)$limit;
+        $stmt = db()->prepare($sql);
+        $stmt->execute($params);
+
+        return $stmt->fetchAll();
+    }
 }
