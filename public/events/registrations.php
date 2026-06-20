@@ -48,9 +48,9 @@ render_metric_cards([
 
     <div class="table-wrap">
         <table>
-            <thead><tr><th>Name</th><th>Email</th><th>Type</th><th>Team</th><th>Registered</th></tr></thead>
+            <thead><tr><th>Name</th><th>Email</th><th>Type</th><th>Team</th><th>Registered</th><th>Actions</th></tr></thead>
             <tbody>
-            <?php if ($participants === []): ?><tr><td colspan="5">No participants found.</td></tr><?php endif; ?>
+            <?php if ($participants === []): ?><tr><td colspan="6">No participants found.</td></tr><?php endif; ?>
             <?php foreach ($participants as $participant): ?>
                 <tr>
                     <td><?= h($participant['full_name']) ?></td>
@@ -58,6 +58,13 @@ render_metric_cards([
                     <td><?= h($participant['registration_type']) ?></td>
                     <td><?= h($participant['team_name'] ?? '-') ?> <?= !empty($participant['team_identifier']) ? '(' . h($participant['team_identifier']) . ')' : '' ?></td>
                     <td><?= h($participant['registered_at']) ?></td>
+                    <td>
+                        <?php if ($participant['registration_type'] === 'team' && !empty($participant['team_id'])): ?>
+                            <a class="button button-small" href="<?= h(url('events/override-team.php?team_id=' . (int) $participant['team_id'] . '&event_id=' . (int) $event['id'])) ?>">Manage Team</a>
+                        <?php else: ?>
+                            -
+                        <?php endif; ?>
+                    </td>
                 </tr>
             <?php endforeach; ?>
             </tbody>
