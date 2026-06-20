@@ -54,9 +54,43 @@ final class AttendanceService
 
         $registrationId = self::getRegistrationId($eventId, $userId, $teamId);
 
+        // Get late status from check-in record
+        $stmt = db()->prepare("SELECT is_late FROM event_attendance WHERE event_id = :event_id AND user_id = :user_id AND attendance_type = 'check_in' LIMIT 1");
+        $stmt->execute(['event_id' => $eventId, 'user_id' => $userId]);
+        $wasLate = (int) ($stmt->fetchColumn() ?? 0) === 1;
+
+        // Record check-out record
         self::recordAttendance($eventId, $userId, (int) $scannerUser['id'], 'check_out', $registrationId, $teamId);
 
-        return ['ok' => true, 'message' => 'Check-out successful.'];
+        // Get early exit status from check-out record
+        $stmt = db()->prepare("SELECT is_early_exit FROM event_attendance WHERE event_id = :event_id AND user_id = :user_id AND attendance_type = 'check_out' LIMIT 1");
+        $stmt->execute(['event_id' => $eventId, 'user_id' => $userId]);
+        $wasEarlyExit = (int) ($stmt->fetchColumn() ?? 0) === 1;
+
+        // Points logic: base 15 points, -5 penalty for late check-in, -5 penalty for early exit.
+        $points = 15;
+        $reasons = [];
+
+        if ($wasLate) {
+            $points -= 5;
+            $reasons[] = 'late check-in';
+        }
+        if ($wasEarlyExit) {
+            $points -= 5;
+            $reasons[] = 'early check-out';
+        }
+
+        $event = Event::findById($eventId);
+        $eventTitle = $event ? $event['title'] : 'Event';
+        $reasonStr = 'Event Attendance: ' . $eventTitle;
+        if ($reasons !== []) {
+            $reasonStr .= ' (' . implode(', ', $reasons) . ')';
+        }
+
+        // Award points
+        PointsService::awardPoints($userId, $points, $reasonStr, 'attendance');
+
+        return ['ok' => true, 'message' => 'Check-out successful. Awarded ' . $points . ' points.'];
     }
 
     public static function hasCheckedIn(int $eventId, int $userId): bool

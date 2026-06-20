@@ -87,3 +87,5 @@ require_once BASE_PATH . '/app/Services/ApprovalService.php';
 require_once BASE_PATH . '/app/Services/QRService.php';
 require_once BASE_PATH . '/app/Services/EventService.php';
 require_once BASE_PATH . '/app/Services/AuthService.php';
+require_once BASE_PATH . '/app/Services/PointsService.php';
+
