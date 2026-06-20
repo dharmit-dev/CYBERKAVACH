@@ -22,6 +22,8 @@
 
 **CyberKavach** is an enterprise-grade Smart Club Management System designed for educational institutions and community clubs. It features a robust multi-level approval workflow, smart certificate rendering with tamper-proof cryptographic verification, gamified reward points appreciation mechanics, active check-in logs, and live operational analytics.
 
+Designed with a clean, creative typographic wordmark brand header asset (`public/assets/images/logo.png`) that gives a premium identity to the platform portal.
+
 ---
 
 ## 🚀 Key Features

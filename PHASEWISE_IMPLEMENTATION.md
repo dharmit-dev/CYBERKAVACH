@@ -115,6 +115,8 @@ This report documents the detailed features, database additions, user interfaces
 *   **Polymorphic Workflow Details Panels (`show.php`)**:
     *   Updated the approval timeline review screen. Detected request `entity_type` and dynamically fetched metadata details for `budget_request`, `venue_resource_request`, `social_media_post`, `content_post`, and `external_collaboration`.
     *   Renders comprehensive detail panels containing specific fields (like amount, venue reservation times, social post captions, attachment file previews, and blog post bodies).
+*   **Creative Typographic Wordmark Logo (`logo.png`)**:
+    *   Designed and integrated a professional, modern typographic wordmark logo for CyberKavach. Features futuristic blue and silver geometric lettering with a minimalist key element, serving as the application's main header identity.
 
 ### 2. Bonus Security Features Added
 *   **OAuth Login CSRF Mitigation**: Used cryptographically secure random session tokens (`state`) checked on redirect response to prevent Session Fixation/OAuth CSRF login attacks.
