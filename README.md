@@ -10,6 +10,7 @@
   <a href="#-key-features">Features</a> •
   <a href="#-tech-stack">Tech Stack</a> •
   <a href="#-installation--setup">Setup</a> •
+  <a href="DEPLOYMENT.md">Deployment Guide</a> •
   <a href="#-sso-sandbox">SSO Sandbox</a> •
   <a href="#-security-architecture">Security</a>
 </p>
@@ -88,10 +89,8 @@ Designed with a clean, creative typographic wordmark brand header asset (`public
    ```
 
 3. **Import Database Migrations**
-   Setup a MySQL database named `cyberkavach`. You can import SQL migrations sequentially from `database/migrations/` or run the database seeder:
-   ```bash
-   php database/migrations/run_all.php
-   ```
+   Setup a MySQL database named `cyberkavach`. You can import the unified [schema.sql](database/schema.sql) file directly into phpMyAdmin or run the SQL script via your CLI.
+
 
 4. **Start local Server**
    Start Apache and MySQL from the XAMPP Control Panel. Open the browser and visit:
