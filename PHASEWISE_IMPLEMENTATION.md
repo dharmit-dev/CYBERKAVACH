@@ -102,3 +102,22 @@ This report documents the detailed features, database additions, user interfaces
 *   **PDO SQL Parameter Binding**: Used strict database parameter binding for all dynamic aggregations to prevent SQL injection attempts.
 *   **HTML Output Sanitization**: Enforced `h()` HTML escaping on all dynamic outputs inside the dashboard grids, charts, and tables to eliminate Cross-Site Scripting (XSS) risks.
 *   **Double-Alert Prevention**: In CLI escalation runs, updates `escalation_due_at = NULL` before dispatching notifications to ensure coordinators only receive a single email alert per overdue request.
+
+---
+
+## 🔑 Phase 6: Google/SSO Integration & Detailed Multi-Workflow Reviews
+
+### 1. Functional Features
+*   **Google OAuth & SSO Flow (`google.php` & `google-callback.php`)**:
+    *   Implemented initiating Google/SSO authentication. If production credentials are not configured, falls back to a custom developer Sandbox showing pre-seeded active accounts and a guest provisioner to simulate SSO sign-in/registration easily.
+    *   Verifies Google identity signals and email addresses. If the user already exists in the database, immediately logs them in.
+    *   If the user is new, auto-registers/provisions them as a verified `guest_participant` and logs them in.
+    *   Integrated a sleek "Sign in with Google" button with micro-animations on the login page (`login.php`).
+*   **Polymorphic Workflow Details Panels (`show.php`)**:
+    *   Updated the approval timeline review screen. Detected request `entity_type` and dynamically fetched metadata details for `budget_request`, `venue_resource_request`, `social_media_post`, `content_post`, and `external_collaboration`.
+    *   Renders comprehensive detail panels containing specific fields (like amount, venue reservation times, social post captions, attachment file previews, and blog post bodies).
+
+### 2. Bonus Security Features Added
+*   **OAuth Login CSRF Mitigation**: Used cryptographically secure random session tokens (`state`) checked on redirect response to prevent Session Fixation/OAuth CSRF login attacks.
+*   **Random secure password lock**: Provisioned SSO users are assigned a secure randomized password hash (`PASSWORD_DEFAULT`), preventing traditional form login bypasses.
+*   **Deep HTML Output Escaping**: Extends strict `h()` HTML formatting to all queried fields from minor workflow tables (captions, body text, partner details, comments) to guarantee XSS prevention.
