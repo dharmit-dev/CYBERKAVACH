@@ -69,10 +69,33 @@ Designed with a clean, creative typographic wordmark brand header asset (`public
 
 ---
 
+## 📁 Directory Structure
+
+```text
+CYBERKAVACH/
+├── app/                  # Core PHP Application Logic
+│   ├── Core/             # Bootstrapping, routing, and database helpers
+│   ├── Helpers/          # Global helper functions (navigation, sanitization)
+│   ├── Middleware/       # Security headers and CORS configuration
+│   ├── Models/           # Database Active-Record models
+│   ├── Services/         # Services (Mail, OTP, Certificates, QR code)
+│   └── Views/            # HTML template views and dashboard panels
+├── config/               # Application & database config files
+├── database/             # Seeding files, migration SQL scripts, and schema.sql
+├── public/               # Publicly accessible web root
+│   ├── assets/           # Stylesheets, scripts, brand logo assets
+│   ├── uploads/          # Generated QR codes, certs, and event posters
+│   └── *.php             # Core entry point page controllers
+├── storage/              # Private application storage (logs, temp records)
+└── .env.example          # Environment template configuration
+```
+
+---
+
 ## 💾 Installation & Setup
 
 ### 📋 Prerequisites
-* XAMPP / WampServer (PHP 7.4+ or PHP 8.0+ with GD and cURL extensions enabled)
+* XAMPP / WampServer (PHP 8.1+ with GD and cURL extensions enabled)
 * MySQL / MariaDB database server
 
 ### ⚙️ Steps
