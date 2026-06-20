@@ -27,11 +27,15 @@ if (time() - $lastResend < 60) {
     redirect('verify-email.php');
 }
 
-$otp = OtpService::create((int) $user['id'], $user['email'], 'email_verification');
-MailService::sendOtp($user['email'], $user['full_name'], $otp, 'email verification');
-AuditService::record('email_otp_resent', 'auth', (int) $user['id'], 'users', (int) $user['id']);
+try {
+    $otp = OtpService::create((int) $user['id'], $user['email'], 'email_verification');
+    MailService::sendOtp($user['email'], $user['full_name'], $otp, 'email verification');
+    AuditService::record('email_otp_resent', 'auth', (int) $user['id'], 'users', (int) $user['id']);
 
-$_SESSION['last_otp_resend_time'] = time();
+    $_SESSION['last_otp_resend_time'] = time();
 
-flash('success', 'A new OTP has been sent.');
+    flash('success', 'A new OTP has been sent.');
+} catch (RuntimeException $e) {
+    flash('error', $e->getMessage());
+}
 redirect('verify-email.php');

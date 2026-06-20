@@ -19,9 +19,15 @@ final class AuthService
             return ['ok' => false, 'errors' => ['general' => 'Unable to create account.']];
         }
 
-        $otp = OtpService::create($userId, $user['email'], 'email_verification');
-        MailService::sendOtp($user['email'], $user['full_name'], $otp, 'email verification');
-        AuditService::record('registered', 'auth', $userId, 'users', $userId);
+        try {
+            $otp = OtpService::create($userId, $user['email'], 'email_verification');
+            MailService::sendOtp($user['email'], $user['full_name'], $otp, 'email verification');
+            AuditService::record('registered', 'auth', $userId, 'users', $userId);
+        } catch (RuntimeException $e) {
+            $stmt = db()->prepare('DELETE FROM users WHERE id = :id');
+            $stmt->execute(['id' => $userId]);
+            return ['ok' => false, 'errors' => ['general' => $e->getMessage()]];
+        }
 
         $_SESSION['pending_verification_user_id'] = $userId;
 

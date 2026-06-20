@@ -16,9 +16,14 @@ if (request_method_is('POST')) {
         back_with_errors(['email' => 'Enter a valid email address.'], ['email' => $email]);
     }
 
-    AuthService::sendPasswordReset($email);
-    flash('success', 'If the email exists, a password reset OTP has been sent.');
-    redirect('reset-password.php?email=' . urlencode($email));
+    try {
+        AuthService::sendPasswordReset($email);
+        flash('success', 'If the email exists, a password reset OTP has been sent.');
+        redirect('reset-password.php?email=' . urlencode($email));
+    } catch (RuntimeException $e) {
+        flash('error', $e->getMessage());
+        back_with_errors(['email' => $e->getMessage()], ['email' => $email]);
+    }
 }
 
 $title = 'Forgot Password | ' . app_config('name');
