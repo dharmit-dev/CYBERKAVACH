@@ -1,8 +1,6 @@
 <p align="center">
-  <img src="public/assets/images/logo.png" alt="CyberKavach Logo" width="120px" onerror="this.style.display='none'"/>
+  <img src="public/assets/images/logo.png" alt="CyberKavach Logo" width="320px"/>
 </p>
-
-<h1 align="center">🛡️ CyberKavach 🛡️</h1>
 
 <p align="center">
   <strong>Smart Club Management System with Multi-Level Governance & Appreciation Ledger</strong>

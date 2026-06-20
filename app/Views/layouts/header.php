@@ -15,6 +15,7 @@ $pageErrors = errors();
 <main class="auth-shell">
     <section class="brand-panel">
         <div>
+            <img src="<?= h(url('assets/images/logo.png')) ?>" alt="CyberKavach Logo" style="height: 65px; margin-bottom: 2rem; display: block;">
             <p class="eyebrow">CyberKavach Club</p>
             <h1>Smart Club Management System</h1>
             <p>Secure role-based access for coordinators, members, and student participants.</p>
