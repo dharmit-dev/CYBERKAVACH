@@ -17,8 +17,8 @@ if (request_method_is('POST')) {
     }
 
     AuthService::sendPasswordReset($email);
-    flash('success', 'If the email exists, a reset link has been sent.');
-    redirect('login.php');
+    flash('success', 'If the email exists, a password reset OTP has been sent.');
+    redirect('reset-password.php?email=' . urlencode($email));
 }
 
 $title = 'Forgot Password | ' . app_config('name');
@@ -35,7 +35,7 @@ require BASE_PATH . '/app/Views/layouts/header.php';
         <?php if (isset($pageErrors['email'])): ?><div class="field-error"><?= h($pageErrors['email']) ?></div><?php endif; ?>
     </div>
 
-    <button class="button" type="submit">Send reset link</button>
+    <button class="button" type="submit">Send OTP</button>
 
     <div class="link-row">
         <a href="<?= h(url('login.php')) ?>">Back to login</a>

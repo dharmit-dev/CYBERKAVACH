@@ -102,34 +102,29 @@ final class AuthService
         $_SESSION['role_key'] = (string) $user['role_key'];
     }
 
-    public static function sendPasswordReset(string $email): void
+    public static function sendPasswordReset(string $email): bool
     {
         $user = User::findByEmail($email);
 
         if (!$user) {
-            return;
+            return false;
         }
 
-        $rawToken = bin2hex(random_bytes(32));
-        $expiresAt = date('Y-m-d H:i:s', time() + ((int) app_config('password_reset_expiry_minutes') * 60));
-
-        $stmt = db()->prepare(
-            'INSERT INTO password_resets (user_id, token_hash, expires_at, is_used, created_at)
-             VALUES (:user_id, :token_hash, :expires_at, 0, NOW())'
-        );
-        $stmt->execute([
-            'user_id' => $user['id'],
-            'token_hash' => hash('sha256', $rawToken),
-            'expires_at' => $expiresAt,
-        ]);
-
-        $resetUrl = url('reset-password.php?token=' . urlencode($rawToken));
-        MailService::sendPasswordReset($user['email'], $user['full_name'], $resetUrl);
+        $otp = OtpService::create((int) $user['id'], $user['email'], 'password_reset');
+        MailService::sendOtp($user['email'], $user['full_name'], $otp, 'password reset');
         AuditService::record('password_reset_requested', 'auth', (int) $user['id'], 'users', (int) $user['id']);
+        return true;
     }
 
-    public static function resetPassword(string $token, string $password, string $confirmPassword): array
+    public static function resetPassword(string $email, string $otp, string $password, string $confirmPassword): array
     {
+        $email = strtolower(trim($email));
+        $user = User::findByEmail($email);
+
+        if (!$user) {
+            return ['ok' => false, 'message' => 'Invalid email address.'];
+        }
+
         if (strlen($password) < 8) {
             return ['ok' => false, 'message' => 'Password must be at least 8 characters.'];
         }
@@ -138,25 +133,14 @@ final class AuthService
             return ['ok' => false, 'message' => 'Passwords do not match.'];
         }
 
-        $stmt = db()->prepare(
-            'SELECT * FROM password_resets
-             WHERE token_hash = :token_hash AND is_used = 0 AND expires_at >= NOW()
-             ORDER BY id DESC
-             LIMIT 1'
-        );
-        $stmt->execute(['token_hash' => hash('sha256', $token)]);
-        $reset = $stmt->fetch();
-
-        if (!$reset) {
-            return ['ok' => false, 'message' => 'Invalid or expired reset link.'];
+        if (!OtpService::verify((int) $user['id'], $otp, 'password_reset')) {
+            AuditService::record('password_reset_failed', 'auth', (int) $user['id'], 'users', (int) $user['id']);
+            return ['ok' => false, 'message' => 'Invalid or expired OTP.'];
         }
 
-        User::updatePassword((int) $reset['user_id'], $password);
+        User::updatePassword((int) $user['id'], $password);
 
-        $update = db()->prepare('UPDATE password_resets SET is_used = 1, used_at = NOW() WHERE id = :id');
-        $update->execute(['id' => $reset['id']]);
-
-        AuditService::record('password_reset_completed', 'auth', (int) $reset['user_id'], 'users', (int) $reset['user_id']);
+        AuditService::record('password_reset_completed', 'auth', (int) $user['id'], 'users', (int) $user['id']);
 
         return ['ok' => true];
     }
