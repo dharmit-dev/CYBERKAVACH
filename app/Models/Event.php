@@ -14,11 +14,11 @@ final class Event
         $stmt = db()->prepare(
             'INSERT INTO events
                 (category_id, title, slug, description, event_date, start_time, end_time, venue,
-                 registration_deadline, capacity, poster_path, team_allowed, min_team_size,
+                 registration_deadline, capacity, late_arrival_threshold_minutes, early_exit_threshold_minutes, poster_path, team_allowed, min_team_size,
                  max_team_size, event_rules, status, created_by, created_at, updated_at)
              VALUES
                 (:category_id, :title, :slug, :description, :event_date, :start_time, :end_time, :venue,
-                 :registration_deadline, :capacity, :poster_path, :team_allowed, :min_team_size,
+                 :registration_deadline, :capacity, :late_arrival_threshold_minutes, :early_exit_threshold_minutes, :poster_path, :team_allowed, :min_team_size,
                  :max_team_size, :event_rules, :status, :created_by, NOW(), NOW())'
         );
         $stmt->execute(self::payload($data));
@@ -42,6 +42,8 @@ final class Event
                  venue = :venue,
                  registration_deadline = :registration_deadline,
                  capacity = :capacity,
+                 late_arrival_threshold_minutes = :late_arrival_threshold_minutes,
+                 early_exit_threshold_minutes = :early_exit_threshold_minutes,
                  poster_path = :poster_path,
                  team_allowed = :team_allowed,
                  min_team_size = :min_team_size,
@@ -64,6 +66,8 @@ final class Event
             'venue' => $data['venue'],
             'registration_deadline' => $data['registration_deadline'],
             'capacity' => $data['capacity'],
+            'late_arrival_threshold_minutes' => $data['late_arrival_threshold_minutes'],
+            'early_exit_threshold_minutes' => $data['early_exit_threshold_minutes'],
             'poster_path' => $data['poster_path'] ?? null,
             'team_allowed' => !empty($data['team_allowed']) ? 1 : 0,
             'min_team_size' => !empty($data['team_allowed']) ? $data['min_team_size'] : null,
@@ -237,6 +241,8 @@ final class Event
             'venue' => $data['venue'],
             'registration_deadline' => $data['registration_deadline'],
             'capacity' => $data['capacity'],
+            'late_arrival_threshold_minutes' => $data['late_arrival_threshold_minutes'],
+            'early_exit_threshold_minutes' => $data['early_exit_threshold_minutes'],
             'poster_path' => $data['poster_path'] ?? null,
             'team_allowed' => !empty($data['team_allowed']) ? 1 : 0,
             'min_team_size' => !empty($data['team_allowed']) ? $data['min_team_size'] : null,
