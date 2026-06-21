@@ -7,22 +7,30 @@
 </p>
 
 <p align="center">
-  <strong>📘 Documentation:</strong>
-  <a href="SUPPORT.md">🚀 Live Deployment</a> •
-  <a href="CONTRIBUTING.md">🏗️ Architecture & Module Guide</a>
+  <strong>📘 Documentation Guides:</strong>
+  <a href="#live-deployment">🚀 Live Deployment</a> •
+  <a href="#system-architecture">🏗️ System Architecture</a> •
+  <a href="#feature-showcase-by-module">🏆 Feature Showcase</a>
 </p>
 
 <p align="center">
   <strong>🔗 Quick Links:</strong>
-  <a href="#-key-features">Key Features</a> •
-  <a href="#-tech-stack">Tech Stack</a> •
-  <a href="#-installation--setup">Setup Guide</a> •
-  <a href="#-sso-sandbox">Auth Sandbox</a> •
-  <a href="#-security-architecture">Security</a>
+  <a href="#key-features">Key Features</a> •
+  <a href="#tech-stack">Tech Stack</a> •
+  <a href="#installation-setup">Setup Guide</a> •
+  <a href="#auth-sandbox">Auth Sandbox</a> •
+  <a href="#security-architecture">Security Details</a>
+</p>
+
+<p align="center">
+  <strong>🤝 Community & Policy:</strong>
+  <a href="CONTRIBUTING.md">Contributing Guidelines</a> •
+  <a href="SUPPORT.md">Get Support</a> •
+  <a href="SECURITY.md">Security Policy</a>
 </p>
 ---
 
-## 🌟 Introduction
+## <a id="introduction"></a>🌟 Introduction
 
 **CyberKavach** is an enterprise-grade Smart Club Management System designed for educational institutions and community clubs. It features a robust multi-level approval workflow, smart certificate rendering with tamper-proof cryptographic verification, gamified reward points appreciation mechanics, active check-in logs, and live operational analytics.
 
@@ -30,7 +38,7 @@ Designed with a clean, creative typographic wordmark brand header asset (`public
 
 ---
 
-## 🚀 Key Features
+## <a id="key-features"></a>🚀 Key Features
 
 ### 🔐 1. Multi-Level Approval Engine
 * **Hierarchical Workflows**: Supports budget approvals, venue reservations, content drafts, and social media posting requests.
@@ -56,7 +64,7 @@ Designed with a clean, creative typographic wordmark brand header asset (`public
 
 ---
 
-## 🛠️ Tech Stack
+## <a id="tech-stack"></a>🛠️ Tech Stack
 
 <p align="center">
   <img src="https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white" alt="PHP"/>
@@ -74,7 +82,7 @@ Designed with a clean, creative typographic wordmark brand header asset (`public
 
 ---
 
-## 📁 Directory Structure
+## <a id="directory-structure"></a>📁 Directory Structure
 
 ```text
 CYBERKAVACH/
@@ -97,7 +105,7 @@ CYBERKAVACH/
 
 ---
 
-## 🏗️ System Architecture
+## <a id="system-architecture"></a>🏗️ System Architecture
 
 ### High-Level Request Flow
 The system processes client requests via index page controllers, validating configurations, and executing active record operations communicating with MySQL databases via PDO.
@@ -136,7 +144,7 @@ stateDiagram-v2
 
 ---
 
-## 🏆 Feature Showcase by Module
+## <a id="feature-showcase-by-module"></a>🏆 Feature Showcase by Module
 
 ### 🔐 Module 1 — Auth & Approvals
 * **Production Google SSO**: Complete auth flow via Google accounts.
@@ -166,7 +174,7 @@ stateDiagram-v2
 
 ---
 
-## 💾 Installation & Setup
+## <a id="installation-setup"></a>💾 Installation & Setup
 
 
 ### 📋 Prerequisites
@@ -196,7 +204,7 @@ stateDiagram-v2
 
 ---
 
-## 🚀 Live Deployment Guide (InfinityFree)
+## <a id="live-deployment"></a>🚀 Live Deployment Guide (InfinityFree)
 
 To deploy CyberKavach securely inside a public `/htdocs` folder where outside folder creation is restricted:
 
@@ -238,7 +246,7 @@ In the Google Cloud Console, update your authorized redirect URI to:
 ---
 
 
-## 🔑 Google Auth Sandbox (SSO)
+## <a id="auth-sandbox"></a>🔑 Google Auth Sandbox (SSO)
 
 If `GOOGLE_CLIENT_ID` is empty in `.env`, clicking **Sign in with Google** redirects to the developer **Google Auth Sandbox**.
 
@@ -253,7 +261,7 @@ If `GOOGLE_CLIENT_ID` is empty in `.env`, clicking **Sign in with Google** redir
 
 ---
 
-## 🛡️ Security Architecture
+## <a id="security-architecture"></a>🛡️ Security Architecture
 
 * **SQL Injection**: Prevented using strict PDO prepared statements.
 * **Cross-Site Scripting (XSS)**: Mitigated by HTML escaping values via `h()`.
