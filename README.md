@@ -7,14 +7,20 @@
 </p>
 
 <p align="center">
-  <a href="#-key-features">Features</a> •
-  <a href="#-tech-stack">Tech Stack</a> •
-  <a href="#-installation--setup">Setup</a> •
-  <a href="DEPLOYMENT.md">Deployment Guide</a> •
-  <a href="#-sso-sandbox">SSO Sandbox</a> •
-  <a href="#-security-architecture">Security</a>
+  <strong>📘 Documentation:</strong>
+  <a href="DEPLOYMENT.md">🚀 Live Deployment</a> •
+  <a href="ARCHITECTURE.md">🏗️ System Architecture</a> •
+  <a href="FEATURES.md">🏆 Feature Showcase</a>
 </p>
 
+<p align="center">
+  <strong>🔗 Quick Links:</strong>
+  <a href="#-key-features">Key Features</a> •
+  <a href="#-tech-stack">Tech Stack</a> •
+  <a href="#-installation--setup">Setup Guide</a> •
+  <a href="#-sso-sandbox">Auth Sandbox</a> •
+  <a href="#-security-architecture">Security</a>
+</p>
 ---
 
 ## 🌟 Introduction
