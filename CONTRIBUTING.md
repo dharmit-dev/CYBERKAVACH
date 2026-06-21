@@ -1,71 +1,40 @@
-# 🏗️ System Architecture & Module Guide
+# 🤝 Contributing to CyberKavach
 
-This document details the software design, database relationships, and system flows implemented across all 6 core modules of the CyberKavach platform.
-
----
-
-## 🗺️ 1. High-Level Architecture Flow
-
-CyberKavach utilizes a lightweight, zero-dependency MVC (Model-View-Controller) structure using strict-typed native PHP.
-
-```mermaid
-graph TD
-    Client[Web Browser Client] -->|HTTP Request| Router[Root index.php & Redirects]
-    Router -->|Load Bootstrap| Core[app/Core/bootstrap.php & env]
-    Core -->|Require Config & Helpers| Config[config/app.php & database.php]
-    Router -->|Execute Page Controller| View[public/*.php Page Views]
-    View -->|Read / Write Data| Model[app/Models/ Active Record]
-    Model -->|Execute Database Operations| DB[(MySQL Database via PDO)]
-    View -->|Delegate Background Tasks| Services[app/Services/ Mail, QR, Points, Certs]
-```
-
-### Access Control Hierarchy
-Users transition between roles, accessing gated dashboards as they are verified and approved:
-
-```mermaid
-stateDiagram-v2
-    [*] --> GuestParticipant: Register / Google SSO
-    GuestParticipant --> ActiveMember: Approved by Coordinator
-    ActiveMember --> StudentCoordinator: Elevated Roles
-    StudentCoordinator --> FacultyCoordinator: Final Club Administrator
-    
-    state FacultyCoordinator {
-        [*] --> ViewAllAudits
-        [*] --> RunMigrations
-        [*] --> FinalWorkflowApproval
-    }
-    state StudentCoordinator {
-        [*] --> ReviewInitialApplications
-        [*] --> ManageEventRegistrations
-    }
-```
+Thank you for your interest in contributing to CyberKavach! We welcome help in resolving bugs, improving documentation, and adding new features.
 
 ---
 
-## 🏆 2. Core Modules Implemented
+## 🛠️ Code of Conduct
+Please read and adhere to our Code of Conduct when submitting issues or pull requests to keep our community safe and welcoming.
 
-### 🔐 Module 1 — Auth & Approvals
-* **Production Google SSO**: Complete auth flow via Google accounts.
-* **Google Auth Sandbox**: Developer sandbox console simulating role login profiles (`faculty_coordinator`, `student_coordinator`, `tech_coordinator`, `club_member`) without requiring live keys.
-* **Polymorphic Approvals**: Multi-step authorization mapping (Student Coordinator review &rarr; Faculty Coordinator final approval) for accounts, events, budget allocations, and venue booking.
+---
 
-### 📜 Module 2 — Certificate System
-* **GD Template Composer**: Renders participant names and details dynamically onto vector template graphics.
-* **Verification Portal**: Public verification page checks signatures via constant-time strings comparison (`hash_equals`) and applies client rate-limiting.
+## 💻 How to Contribute
 
-### 📅 Module 3 — Event & Team Management
-* **Registrations**: Set registration deadlines, participant capacities, team limits, and upload posters.
-* **Saved Teams**: Members can save custom teams (e.g., "CyberSentinels") for fast single-click event registration.
+### 1. Reporting Bugs & Issues
+* Search existing issues to ensure the bug has not been reported.
+* Open a new issue with a clear description of the problem, steps to reproduce, and screenshots if applicable.
 
-### ⏱️ Module 4 — Attendance Check-In/Out
-* **QR Camera Scanner**: Real-time scanner powered by HTML5-QRCode reads check-in codes instantly.
-* **Punctuality Audit**: Flags late arrivals and early exits automatically based on custom timeline parameters.
+### 2. Suggesting Features
+* Open a feature request issue describing the proposed functionality and its benefits to the project.
 
-### 🏆 Module 5 — Points & Recognition
-* **Appreciation Ledger**: Automatically awards +15 points for check-in and penalizes late arrivals or early exits (-5 points).
-* **Badge Unlock**: Milestones automatically trigger progression badges (*Novice*, *Dedicated*, *Cyber Sentinel*, *Elite*).
-* **Rewards Shop**: Row-level transaction locks (`FOR UPDATE`) protect point redemptions against double-spending attacks.
+### 3. Submitting Pull Requests (PRs)
+1. Fork the repository and create your feature branch:
+   ```bash
+   git checkout -b feature/amazing-new-feature
+   ```
+2. Write clean, readable, object-oriented PHP code following the standard PSR-12 style guidelines.
+3. Make sure to comment your functions and document complex logic.
+4. Test your changes locally before committing.
+5. Commit your changes with descriptive commit messages:
+   ```bash
+   git commit -m "feat(auth): lock session validation to client IP and User Agent"
+   ```
+6. Push to your branch and open a Pull Request against the `main` branch.
 
-### 📊 Module 6 — Analytics & Settings
-* **Metrics Consoles**: CSS gauges displaying registration rates, check-in averages, and workload metrics.
-* **Oversight Audit Logs**: Tracks model mutations recording before-and-after JSON configurations along with IP addresses and user agents.
+---
+
+## 📐 Coding Standards
+* Enforce PHP strict types in all new files: `declare(strict_types=1);`
+* Bind all SQL parameters using PDO prepared statements to avoid SQL Injection.
+* Sanitize all user-facing inputs and render outputs via the `h()` HTML escape helper function to prevent Cross-Site Scripting (XSS).

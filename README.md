@@ -136,7 +136,38 @@ stateDiagram-v2
 
 ---
 
+## 🏆 Feature Showcase by Module
+
+### 🔐 Module 1 — Auth & Approvals
+* **Production Google SSO**: Complete auth flow via Google accounts.
+* **Google Auth Sandbox**: Developer sandbox console simulating role login profiles (`faculty_coordinator`, `student_coordinator`, `tech_coordinator`, `club_member`) without requiring live keys.
+* **Polymorphic Approvals**: Multi-step authorization mapping (Student Coordinator review &rarr; Faculty Coordinator final approval) for accounts, events, budget allocations, and venue booking.
+
+### 📜 Module 2 — Certificate System
+* **GD Template Composer**: Renders participant names and details dynamically onto vector template graphics.
+* **Verification Portal**: Public verification page checks signatures via constant-time strings comparison (`hash_equals`) and applies client rate-limiting.
+
+### 📅 Module 3 — Event & Team Management
+* **Registrations**: Set registration deadlines, participant capacities, team limits, and upload posters.
+* **Saved Teams**: Members can save custom teams (e.g., "CyberSentinels") for fast single-click event registration.
+
+### ⏱️ Module 4 — Attendance Check-In/Out
+* **QR Camera Scanner**: Real-time scanner powered by HTML5-QRCode reads check-in codes instantly.
+* **Punctuality Audit**: Flags late arrivals and early exits automatically based on custom timeline parameters.
+
+### 🏆 Module 5 — Points & Recognition
+* **Appreciation Ledger**: Automatically awards +15 points for check-in and penalizes late arrivals or early exits (-5 points).
+* **Badge Unlock**: Milestones automatically trigger progression badges (*Novice*, *Dedicated*, *Cyber Sentinel*, *Elite*).
+* **Rewards Shop**: Row-level transaction locks (`FOR UPDATE`) protect point redemptions against double-spending attacks.
+
+### 📊 Module 6 — Analytics & Settings
+* **Metrics Consoles**: CSS gauges displaying registration rates, check-in averages, and workload metrics.
+* **Oversight Audit Logs**: Tracks model mutations recording before-and-after JSON configurations along with IP addresses and user agents.
+
+---
+
 ## 💾 Installation & Setup
+
 
 ### 📋 Prerequisites
 * XAMPP / WampServer (PHP 8.1+ with GD and cURL extensions enabled)
@@ -164,6 +195,48 @@ stateDiagram-v2
    `http://localhost/CYBERKAVACH/`
 
 ---
+
+## 🚀 Live Deployment Guide (InfinityFree)
+
+To deploy CyberKavach securely inside a public `/htdocs` folder where outside folder creation is restricted:
+
+### 📤 1. Upload Project Files
+Upload the entire project root (`app/`, `config/`, `database/`, `public/`, `storage/`, `.env`, `.htaccess`, `index.php`) inside the `/htdocs` folder using your Web File Manager (Monsta FTP). Do **not** upload the `vendor` folder; the system automatically falls back to its built-in zero-dependency code library.
+
+### ⚙️ 2. Configure Environment (`.env`)
+Double-click your online `.env` file and configure it as follows:
+```ini
+APP_NAME="CyberKavach Club"
+APP_ENV=production
+APP_URL=https://yourdomain.infinityfreeapp.com/public    # <-- Must include /public
+APP_DEBUG=false
+
+DB_HOST=sqlXXX.infinityfree.com                           # <-- Copy from MySQL Databases cPanel
+DB_PORT=3306
+DB_DATABASE=if0_XXXXXXXX_cyberkavach
+DB_USERNAME=if0_XXXXXXXX
+DB_PASSWORD=your_mysql_password
+DB_CHARSET=utf8mb4
+
+# SMTP Gmail configuration
+MAIL_FROM_ADDRESS=your-gmail@gmail.com
+MAIL_FROM_NAME="CyberKavach Club"
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=your-gmail@gmail.com
+MAIL_PASSWORD=your-google-app-password                   # <-- 16-character App Password
+
+# Google OAuth Keys
+GOOGLE_CLIENT_ID=your-google-client-id.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=your-google-client-secret
+```
+
+### 🔒 3. Align Google Redirect URI
+In the Google Cloud Console, update your authorized redirect URI to:
+`https://yourdomain.infinityfreeapp.com/public/auth/google-callback.php`
+
+---
+
 
 ## 🔑 Google Auth Sandbox (SSO)
 
