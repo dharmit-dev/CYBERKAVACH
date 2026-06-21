@@ -8,9 +8,8 @@
 
 <p align="center">
   <strong>📘 Documentation:</strong>
-  <a href="DEPLOYMENT.md">🚀 Live Deployment</a> •
-  <a href="ARCHITECTURE.md">🏗️ System Architecture</a> •
-  <a href="FEATURES.md">🏆 Feature Showcase</a>
+  <a href="SUPPORT.md">🚀 Live Deployment</a> •
+  <a href="CONTRIBUTING.md">🏗️ Architecture & Module Guide</a>
 </p>
 
 <p align="center">
@@ -94,6 +93,45 @@ CYBERKAVACH/
 │   └── *.php             # Core entry point page controllers
 ├── storage/              # Private application storage (logs, temp records)
 └── .env.example          # Environment template configuration
+```
+
+---
+
+## 🏗️ System Architecture
+
+### High-Level Request Flow
+The system processes client requests via index page controllers, validating configurations, and executing active record operations communicating with MySQL databases via PDO.
+
+```mermaid
+graph TD
+    Client[Web Browser Client] -->|HTTP Request| Router[Root index.php & Redirects]
+    Router -->|Load Bootstrap| Core[app/Core/bootstrap.php & env]
+    Core -->|Require Config & Helpers| Config[config/app.php & database.php]
+    Router -->|Execute Page Controller| View[public/*.php Page Views]
+    View -->|Read / Write Data| Model[app/Models/ Active Record]
+    Model -->|Execute Database Operations| DB[(MySQL Database via PDO)]
+    View -->|Delegate Background Tasks| Services[app/Services/ Mail, QR, Points, Certs]
+```
+
+### Access Control Hierarchy
+Users transition between roles, accessing gated dashboards as they are verified and approved:
+
+```mermaid
+stateDiagram-v2
+    [*] --> GuestParticipant: Register / Google SSO
+    GuestParticipant --> ActiveMember: Approved by Coordinator
+    ActiveMember --> StudentCoordinator: Elevated Roles
+    StudentCoordinator --> FacultyCoordinator: Final Club Administrator
+    
+    state FacultyCoordinator {
+        [*] --> ViewAllAudits
+        [*] --> RunMigrations
+        [*] --> FinalWorkflowApproval
+    }
+    state StudentCoordinator {
+        [*] --> ReviewInitialApplications
+        [*] --> ManageEventRegistrations
+    }
 ```
 
 ---
